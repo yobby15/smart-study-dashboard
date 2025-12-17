@@ -1,10 +1,19 @@
-import React from "react";
-import { User, ChevronDown } from "lucide-react";
-import logo from "../../assets/images/logo.svg";
+import React from 'react';
+import { User, ChevronDown } from 'lucide-react';
+import logo from '../../assets/images/logo.svg';
 
 const NavigationUp = ({ isLandingPage = false }) => {
   return (
-    <nav className="w-full px-8 py-4 flex justify-between items-center bg-[#0096C7]/80 backdrop-blur-sm">
+    <nav
+      className={`
+      w-full px-8 py-4 flex justify-between items-center transition-all duration-300
+      ${
+        isLandingPage
+          ? 'bg-[#0096C7]/80 backdrop-blur-sm'
+          : 'bg-[#0096C7] backdrop-blur-none'
+      }
+    `}
+    >
       <div className="flex-1">
         <h1 className="font-bold text-lg md:text-xl  text-[#03045E]">
           Smart Study Assistant
@@ -24,7 +33,7 @@ const NavigationUp = ({ isLandingPage = false }) => {
         <button className="flex items-center gap-2 font-medium hover:opacity-75 transition">
           <User size={20} className="text-[#03045E]" />
           <span className="text-[#03045E]">
-            {isLandingPage ? "Login" : "User"}
+            {isLandingPage ? 'Login' : 'User'}
           </span>
         </button>
       </div>
