@@ -6,7 +6,7 @@ const NavigationUp = ({ isLandingPage = false }) => {
   return (
     <nav
       className={`
-      w-full px-8 py-4 flex justify-between items-center transition-all duration-300
+      w-full px-6 py-2.5 flex justify-between items-center transition-all duration-300
       ${
         isLandingPage
           ? 'bg-[#0096C7]/80 backdrop-blur-sm'
@@ -15,24 +15,24 @@ const NavigationUp = ({ isLandingPage = false }) => {
     `}
     >
       <div className="flex-1">
-        <h1 className="font-bold text-lg md:text-xl  text-[#03045E]">
+        <h1 className="font-bold text-base md:text-lg text-[#03045E] leading-tight">
           Smart Study Assistant
         </h1>
       </div>
 
-      <div className="flex-1 flex justify-center items-center gap-2">
-        <img src={logo} alt="Vivian Logo" />
+      <div className="flex-1 flex justify-center items-center">
+        <img src={logo} alt="Vivian Logo" className="h-6 w-auto" />
       </div>
 
-      <div className="flex-1 flex justify-end items-center gap-6">
-        <button className="flex items-center gap-1 font-medium hover:opacity-75 transition">
-          <span className="text-sm text-[#03045E]">EN</span>
-          <ChevronDown size={16} strokeWidth={3} className="text-[#03045E]" />
+      <div className="flex-1 flex justify-end items-center gap-4">
+        <button className="flex items-center gap-0.5 font-medium hover:opacity-75 transition">
+          <span className="text-xs text-[#03045E]">EN</span>
+          <ChevronDown size={14} strokeWidth={3} className="text-[#03045E]" />
         </button>
 
-        <button className="flex items-center gap-2 font-medium hover:opacity-75 transition">
-          <User size={20} className="text-[#03045E]" />
-          <span className="text-[#03045E]">
+        <button className="flex items-center gap-1.5 font-medium hover:opacity-75 transition">
+          <User size={18} className="text-[#03045E]" />
+          <span className="text-sm text-[#03045E]">
             {isLandingPage ? 'Login' : 'User'}
           </span>
         </button>

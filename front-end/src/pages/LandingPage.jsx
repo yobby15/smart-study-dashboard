@@ -12,7 +12,7 @@ const LandingPage = () => {
 
   return (
     <div style={{ backgroundImage: `url(${LandingImage})`}} className="w-screen h-screen bg-cover bg-center flex flex-col">
-      <NavigationUp isLandingPage={true} />
+      <NavigationUp isLandingPage={true}/>
       
       <div className="grow"> 
           <ButtonLanding onClick={handleGoToLogin}/>

@@ -1,14 +1,9 @@
 import React from 'react';
 import NavigationUp from '../components/global/NavigationUp';
-import LoginBox from '../components/login/LoginBox';
+import LoginCard from '../components/login-page/LoginCard';
 import LandingImage from '../assets/images/landing-image.png';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const navigate = useNavigate();
-  const handleGoToHome = () => {
-    navigate('/home');
-  };
 
   return (
     <div
@@ -17,7 +12,7 @@ const Login = () => {
     >
       <NavigationUp isLandingPage={true} />
       <div className="grow">
-        <LoginBox onClick={handleGoToHome} />
+        <LoginCard/>
       </div>
     </div>
   );
