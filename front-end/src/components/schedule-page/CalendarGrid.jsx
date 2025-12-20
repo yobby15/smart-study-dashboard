@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import DetailModal from './DetailModal'; 
 
 const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
+  const [selectedDay, setSelectedDay] = useState(null);
   const boxes = [];
   const totalSlots = 42;
 
@@ -15,7 +17,11 @@ const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
   for (let d = 1; d <= daysInMonth; d++) {
     const isToday = new Date().toDateString() === new Date(year, month, d).toDateString();
     boxes.push(
-      <div key={`curr-${d}`} className={`h-20 md:h-24 p-2 border-r border-b border-[#03045E] flex flex-col justify-between hover:bg-[#48CAE4]/30 transition-all cursor-pointer ${isToday ? 'bg-[#CAF0F8]' : 'bg-[#90E0EF]'}`}>
+      <div 
+        key={`curr-${d}`} 
+        onClick={() => setSelectedDay(d)} 
+        className={`h-20 md:h-24 p-2 border-r border-b border-[#03045E] flex flex-col justify-between hover:bg-[#48CAE4]/30 transition-all cursor-pointer ${isToday ? 'bg-[#CAF0F8]' : 'bg-[#90E0EF]'}`}
+      >
         <span className="font-bold text-[#03045E] text-xs md:text-sm self-end">{d}</span>
         <span className="text-[8px] md:text-[10px] text-[#03045E]/60 italic line-clamp-1">See Detail...</span>
       </div>
@@ -31,7 +37,21 @@ const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
     );
   }
 
-  return <div className="grid grid-cols-7">{boxes}</div>;
+  return (
+    <>
+      <div className="grid grid-cols-7 border-l border-t border-[#03045E]">
+        {boxes}
+      </div>
+
+      <DetailModal 
+        isOpen={selectedDay !== null} 
+        onClose={() => setSelectedDay(null)} 
+        day={selectedDay}
+        year={year}
+        month={month}
+      />
+    </>
+  );
 };
 
 export default CalendarGrid;
