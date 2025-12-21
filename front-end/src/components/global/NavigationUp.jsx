@@ -1,6 +1,7 @@
 import React from 'react';
 import { User, ChevronDown } from 'lucide-react';
 import logo from '../../assets/images/logo.svg';
+import { Link } from 'react-router-dom';
 
 const NavigationUp = ({ isLandingPage = false }) => {
   return (
@@ -20,9 +21,9 @@ const NavigationUp = ({ isLandingPage = false }) => {
         </h1>
       </div>
 
-      <div className="flex-1 flex justify-center items-center">
+      <Link to="/home" className="hover:opacity-80 transition">
         <img src={logo} alt="Vivian Logo" className="h-6 w-auto" />
-      </div>
+      </Link>
 
       <div className="flex-1 flex justify-end items-center gap-4">
         <button className="flex items-center gap-0.5 font-medium hover:opacity-75 transition">
@@ -31,10 +32,15 @@ const NavigationUp = ({ isLandingPage = false }) => {
         </button>
 
         <button className="flex items-center gap-1.5 font-medium hover:opacity-75 transition">
-          <User size={18} className="text-[#03045E]" />
-          <span className="text-sm text-[#03045E]">
-            {isLandingPage ? 'Login' : 'User'}
-          </span>
+          <Link 
+            to={isLandingPage ? '/login' : '/profile'} 
+            className="flex items-center gap-1.5 font-medium hover:opacity-75 transition"
+          >
+            <User size={18} className="text-[#03045E]" />
+            <span className="text-sm text-[#03045E]">
+              {isLandingPage ? 'Login' : 'User'}
+            </span>
+          </Link>
         </button>
       </div>
     </nav>

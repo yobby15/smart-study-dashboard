@@ -7,6 +7,7 @@ import TaskPage from './pages/TaskPage';
 import ClassPage from './pages/ClassPage';
 import SchedulePage from "./pages/SchedulePage";
 import StatisticPage from './pages/StatisticPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/class" element={<ClassPage />} />
       <Route path="/schedule" element={<SchedulePage />} />
       <Route path="/statistic" element={<StatisticPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   )
 }

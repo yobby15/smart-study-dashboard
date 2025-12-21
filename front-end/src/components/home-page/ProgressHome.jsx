@@ -13,6 +13,7 @@ const ProgressHome = () => {
         <ContentCard>
           <ClassHomeCard/>
         </ContentCard>
+
         <ContentCard>
           <ExerciseHomeCard/>
         </ContentCard>
