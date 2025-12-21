@@ -28,3 +28,51 @@ export const DAILY_SCHEDULES = {
     { title: "Exercise Soft Skill 1", time: "15.00 - 17.00" },
   ],
 };
+
+export const CLASS_LIST = [
+  { 
+    id: 1, 
+    title: "React Basics", 
+    percentage: 80,
+    modules: [
+      { id: 1, title: "Introduction to JSX", status: "completed" },
+      { id: 2, title: "Components & Props", status: "completed" },
+      { id: 3, title: "State & Lifecycle", status: "completed" },
+      { id: 4, title: "React Hooks (useState)", status: "uncompleted" },
+      { id: 5, title: "Handling Events", status: "uncompleted" },
+    ]
+  },
+  { 
+    id: 2, 
+    title: "Javascript Advanced", 
+    percentage: 45,
+    modules: [
+      { id: 1, title: "ES6+ Features", status: "completed" },
+      { id: 2, title: "Async/Await & Promises", status: "uncompleted" },
+      { id: 3, title: "Closures & Scope", status: "uncompleted" },
+      { id: 4, title: "DOM Manipulation", status: "uncompleted" },
+    ]
+  },
+  { 
+    id: 3, 
+    title: "UI/UX Fundamental", 
+    percentage: 100,
+    modules: [
+      { id: 1, title: "Design Thinking", status: "completed" },
+      { id: 2, title: "Color Theory", status: "completed" },
+      { id: 3, title: "Typography", status: "completed" },
+      { id: 4, title: "Figma Basics", status: "completed" },
+    ]
+  },
+  { 
+    id: 4, 
+    title: "Backend with Node", 
+    percentage: 10,
+    modules: [
+      { id: 1, title: "Node.js Installation", status: "completed" },
+      { id: 2, title: "Express Framework", status: "uncompleted" },
+      { id: 3, title: "REST API Structure", status: "uncompleted" },
+      { id: 4, title: "Database Connection", status: "uncompleted" },
+    ]
+  },
+];
