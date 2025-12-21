@@ -6,7 +6,7 @@ const Title = ({ Title, SubTitle, Icon }) => {
       {Icon && <Icon className="size-10 text-[#03045E] shrink-0" />}
       
       <div>
-        <h1 className="text-[28px] text-[#03045E] font-semibold leading-tight">
+        <h1 className="text-[28px] text-[#03045E] font-semibold">
           {Title}
         </h1>
         <p className="text-[#03045E] font-medium opacity-80">

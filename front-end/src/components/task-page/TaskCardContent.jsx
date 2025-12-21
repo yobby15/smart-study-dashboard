@@ -9,7 +9,7 @@ const statusColors = {
 const TaskCardContent = ({ title, status }) => {
   return (
     <div className="flex justify-between items-center w-full px-1">
-      <h3 className="text-[#03045E] font-semibold text-sm md:text-base tracking-tight">
+      <h3 className="text-[#03045E] font-semibold text-base">
         {title}
       </h3>
 

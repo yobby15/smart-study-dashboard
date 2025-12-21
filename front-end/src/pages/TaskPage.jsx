@@ -9,6 +9,12 @@ import { Notebook } from 'lucide-react';
 import TaskCardContent from "../components/task-page/TaskCardContent";
 
 const TaskPage = () => {
+  const taskList = [
+    { id: 1, title: "Submission 1 Starting Basic AI", status: "In Progress" },
+    { id: 2, title: "Quiz 1: Logic Gate", status: "Completed" },
+    { id: 3, title: "Final Project", status: "Overdue" },
+  ];
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
       <NavigationUp/>
@@ -19,17 +25,14 @@ const TaskPage = () => {
       />
       <ActivityTabs/>
       <SectionContainer>
-        <ContentCard>
-          <TaskCardContent title="Submission 1 Starting Basic AI" status="In Progress" />
-        </ContentCard>
-
-        <ContentCard>
-          <TaskCardContent title="Quiz 1: Logic Gate" status="Completed" />
-        </ContentCard>
-
-        <ContentCard>
-          <TaskCardContent title="Final Project" status="Overdue" />
-        </ContentCard>
+        {taskList.map((item) => (
+          <ContentCard key={item.id}>
+            <TaskCardContent 
+              title={item.title} 
+              status={item.status} 
+            />
+          </ContentCard>
+        ))}
       </SectionContainer>
       <NavigationDown/>
     </div>

@@ -38,7 +38,7 @@ const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
   }
 
   return (
-    <>
+    <div>
       <div className="grid grid-cols-7 border-l border-t border-[#03045E]">
         {boxes}
       </div>
@@ -50,7 +50,7 @@ const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
         year={year}
         month={month}
       />
-    </>
+    </div>
   );
 };
 
