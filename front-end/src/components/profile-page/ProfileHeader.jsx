@@ -2,7 +2,7 @@ import React from 'react';
 import { User } from 'lucide-react';
 import ContentCard from "../global/ContentCard";
 
-const ProfileHeader = ({ name, id }) => {
+const ProfileHeader = ({ name, id_program }) => {
   return (
     <ContentCard className="bg-white p-6 rounded-2xl shadow-sm mb-4 mt-4 flex flex-col items-center text-center relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-24 bg-linear-to-b from-[#0096C7] to-[#CAF0F8] opacity-20"></div>
@@ -17,7 +17,7 @@ const ProfileHeader = ({ name, id }) => {
         <h2 className="text-2xl font-bold text-[#03045E]">{name}</h2>
         
         <p className="text-sm font-medium text-[#0077B6] bg-[#CAF0F8] px-3 py-1 rounded-full inline-block mt-1">
-          ID: {id}
+          ID: {id_program}
         </p>
       </div>
     </ContentCard>

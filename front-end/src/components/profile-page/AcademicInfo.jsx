@@ -37,8 +37,8 @@ const AcademicInfo = ({ data }) => {
         
         <InfoRow 
             icon={GraduationCap} 
-            label="Faculty Supervisor (Dospem)" 
-            value={data.dosen} 
+            label="Faculty Supervisor" 
+            value={data.lecturer} 
         />
       </div>
     </ContentCard>

@@ -1,25 +1,22 @@
 import React from 'react';
 
-const FilterTabs = () => {
-  const buttonStyle = "flex-1 text-xs font-semibold py-1 rounded-lg bg-[#90E0EF] text-[#03045E] hover:bg-[#90E0EF] hover:text-[#03045E]/40 transition duration-300 border border-transparent hover:border-[#03045E]/40";
+const FilterTabs = ({ currentFilter, onFilterChange }) => {
+  const tabs = ["All", "In Progress", "Completed", "Overdue"];
+  const baseStyle = "px-4 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200";
+  const activeStyle = "bg-[#03045E] text-white shadow-md"; 
+  const inactiveStyle = "bg-[#90E0EF] text-[#03045E] hover:bg-[#00B4D8] hover:text-white";
 
   return (
-    <div className="flex flex-row gap-4 w-lg mt-1">
-      <button className={buttonStyle}>
-        All
-      </button>
-        
-      <button className={buttonStyle}>
-        In Progress
-      </button>
-
-      <button className={buttonStyle}>
-        Completed
-      </button>
-
-      <button className={buttonStyle}>
-        Overdue
-      </button>
+    <div className="flex flex-wrap gap-2">
+      {tabs.map((tab) => (
+        <button 
+          key={tab}
+          onClick={() => onFilterChange(tab)}
+          className={`${baseStyle} ${currentFilter === tab ? activeStyle : inactiveStyle}`}
+        >
+          {tab}
+        </button>
+      ))}
     </div>
   );
 };

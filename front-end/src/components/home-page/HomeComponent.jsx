@@ -3,12 +3,12 @@ import Title from './Title';
 import ScheduleHome from './ScheduleHome';
 import ProgressHome from './ProgressHome';
 
-const HomeComponent = () => {
+const HomeComponent = ({ user }) => {
   return (
     <div>
       <Title/>
-      <ScheduleHome/>
-      <ProgressHome/>
+      <ScheduleHome user={user}/>
+      <ProgressHome user={user}/>
     </div>
   );
 };

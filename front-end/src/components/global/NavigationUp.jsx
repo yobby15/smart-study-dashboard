@@ -3,7 +3,13 @@ import { User, ChevronDown } from 'lucide-react';
 import logo from '../../assets/images/logo.svg';
 import { Link } from 'react-router-dom';
 
-const NavigationUp = ({ isLandingPage = false }) => {
+const NavigationUp = ({ isLandingPage = false, user }) => {
+  const getDisplayName = () => {
+    if (!user || !user.name) return 'User';
+    
+    return user.name.split(' ')[0]; 
+  };
+
   return (
     <nav
       className={`
@@ -21,7 +27,7 @@ const NavigationUp = ({ isLandingPage = false }) => {
         </h1>
       </div>
 
-      <Link to="/home" className="hover:opacity-80 transition">
+      <Link to="/" className="hover:opacity-80 transition">
         <img src={logo} alt="Vivian Logo" className="h-6 w-auto" />
       </Link>
 
@@ -38,7 +44,7 @@ const NavigationUp = ({ isLandingPage = false }) => {
           >
             <User size={18} className="text-[#03045E]" />
             <span className="text-sm text-[#03045E]">
-              {isLandingPage ? 'Login' : 'User'}
+              {isLandingPage ? 'Login' : getDisplayName()}
             </span>
           </Link>
         </button>

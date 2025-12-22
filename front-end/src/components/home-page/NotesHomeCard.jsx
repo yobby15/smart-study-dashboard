@@ -1,23 +1,66 @@
 import React from 'react';
 
-const NotesHomeCard = () => {
+const NotesHomeCard = ({ user }) => {
+  if (!user) return null;
+
+  const today = new Date();
+  const dateKey = today.toISOString().split('T')[0]; 
+
+  const notes = [];
+
+  const todayAttendance = user.attendance?.[dateKey];
+  
+  if (todayAttendance) {
+    notes.push({
+      text: `Today's Note: "${todayAttendance.note}"`,
+      type: "success" 
+    });
+  } else {
+    notes.push({
+      text: "⚠️ You haven't filled attendance today yet!",
+      type: "warning" 
+    });
+  }
+
+  const overdueTasks = user.tasks?.filter(t => t.status === "Overdue");
+  if (overdueTasks?.length > 0) {
+    notes.push({
+      text: `Urgent: You have ${overdueTasks.length} overdue task(s).`,
+      type: "danger"
+    });
+  }
+
+  const inProgressTasks = user.tasks?.filter(t => t.status === "In Progress");
+  if (overdueTasks?.length === 0 && inProgressTasks?.length > 0) {
+    notes.push({
+      text: `Reminder: Focus on "${inProgressTasks[0].title}".`,
+      type: "info"
+    });
+  }
+
+  if (notes.length === 0) {
+    notes.push({ text: "No pending notifications. Have a great day!", type: "success" });
+  }
+
   return (
     <div className="flex flex-col p-1">
-      <ul className="space-y-2">
-        <li className="flex items-start gap-2 text-sm text-[#03045E]">
-          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#03045E] shrink-0" />
-          <p>You are not absent yet</p>
-        </li>
-        
-        <li className="flex items-start gap-2 text-sm text-[#03045E]">
-          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#03045E] shrink-0" />
-          <p>Your exercise is not finished yet</p>
-        </li>
-      </ul>
+      <ul className="space-y-3">
+        {notes.map((note, index) => (
+          <li key={index} className="flex items-start gap-2 text-sm text-[#03045E]">
+            <span 
+              className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${
+                note.type === 'warning' || note.type === 'danger' ? 'bg-red-500' : 'bg-[#03045E]'
+              }`} 
+            />
 
-      <button className="text-xs text-[#03045E]/60 hover:underline self-start mt-4">
-        See More...
-      </button>
+            <p className={`leading-tight ${
+                 note.type === 'danger' ? 'font-bold text-red-600' : ''
+            }`}>
+              {note.text}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

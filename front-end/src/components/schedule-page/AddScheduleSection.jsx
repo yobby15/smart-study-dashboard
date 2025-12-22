@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 
-const AddScheduleSection = ({ onBack, initialData }) => {
+const AddScheduleSection = ({ onBack, initialData, onSave }) => {
   const [task, setTask] = useState(initialData?.title || "");
-  const [time, setTime] = useState(initialData?.time || "");
+  const [startTime, setStartTime] = useState(initialData?.startTime || "");
+  const [endTime, setEndTime] = useState(initialData?.endTime || "");
+
+  const handleSubmit = () => {
+    // Validasi sederhana
+    if (!task) return alert("Activity cannot be empty!");
+    if (!startTime && startTime !== "All Day") return alert("Start time required!");
+
+    const newItem = {
+      title: task,
+      startTime: startTime,
+      endTime: endTime
+    };
+
+    onSave(newItem);
+  };
 
   return (
     <div className="pt-2">
@@ -16,14 +31,22 @@ const AddScheduleSection = ({ onBack, initialData }) => {
       <div className="border-t border-[#03045E]/20 pt-4">
         <div className="space-y-4">
           <div>
-            <label className="text-[#03045E] text-xs font-bold ml-2">Time</label>
-            <input 
-              type="text"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              placeholder="00:00 - 00:00"
-              className="w-full p-3 bg-[#CAF0F8]/50 border border-[#03045E]/30 rounded-xl text-[#03045E] focus:outline-none focus:ring-2 focus:ring-[#48CAE4]"
-            />
+            <label className="text-[#03045E] text-xs font-bold ml-2">Time (Start - End)</label>
+            <div className="flex items-center gap-2">
+              <input 
+                type="time" 
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="w-full p-3 bg-[#CAF0F8]/50 border border-[#03045E]/30 rounded-xl text-[#03045E] focus:outline-none focus:ring-2 focus:ring-[#48CAE4]"
+              />
+              <span className="text-[#03045E] font-bold">-</span>
+              <input 
+                type="time" 
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="w-full p-3 bg-[#CAF0F8]/50 border border-[#03045E]/30 rounded-xl text-[#03045E] focus:outline-none focus:ring-2 focus:ring-[#48CAE4]"
+              />
+            </div>
           </div>
 
           <div>
@@ -38,7 +61,10 @@ const AddScheduleSection = ({ onBack, initialData }) => {
         </div>
 
         <div className="mt-4 flex justify-center">
-          <button className="bg-[#CAF0F8] border border-[#03045E] px-8 py-2 rounded-xl text-[#03045E] text-sm font-bold shadow-md hover:bg-[#48CAE4]">
+          <button 
+            onClick={handleSubmit}
+            className="bg-[#CAF0F8] border border-[#03045E] px-8 py-2 rounded-xl text-[#03045E] text-sm font-bold shadow-md hover:bg-[#48CAE4]"
+          >
             {initialData ? 'Update' : 'Submit'}
           </button>
         </div>

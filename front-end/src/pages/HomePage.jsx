@@ -3,13 +3,13 @@ import NavigationUp from '../components/global/NavigationUp';
 import NavigationDown from '../components/global/NavigationDown';
 import HomeComponent from '../components/home-page/HomeComponent'
 
-const HomePage = () => {
+const HomePage = ({ user }) => {
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
-      <NavigationUp />
+      <NavigationUp user={user} />
       
       <main className="flex-1 w-full">
-        <HomeComponent />
+        <HomeComponent user={user}/>
       </main>
 
       <NavigationDown />

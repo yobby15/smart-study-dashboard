@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DetailModal from './DetailModal'; 
 
-const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
+const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax, user, schedules, onUpdateUser }) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const boxes = [];
   const totalSlots = 42;
@@ -49,6 +49,9 @@ const CalendarGrid = ({ year, month, firstDay, daysInMonth, prevDaysMax }) => {
         day={selectedDay}
         year={year}
         month={month}
+        user={user}
+        schedules={schedules}
+        onUpdateUser={onUpdateUser}
       />
     </div>
   );

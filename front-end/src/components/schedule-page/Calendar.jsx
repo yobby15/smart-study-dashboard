@@ -3,7 +3,7 @@ import CalendarHeader from './CalendarHeader';
 import CalendarDays from './CalendarDays';
 import CalendarGrid from './CalendarGrid';
 
-const Calendar = () => {
+const Calendar = ({ user, schedules, onUpdateUser }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -28,12 +28,16 @@ const Calendar = () => {
 
       <div className="bg-[#90E0EF] border-2 border-[#03045E] rounded-lg overflow-hidden shadow-inner">
         <CalendarDays days={days} />
+
         <CalendarGrid 
           year={year} 
           month={month} 
           firstDay={data.firstDay} 
           daysInMonth={data.daysInMonth} 
           prevDaysMax={data.prevDaysMax} 
+          user={user}
+          schedules={schedules}
+          onUpdateUser={onUpdateUser} 
         />
       </div>
     </div>

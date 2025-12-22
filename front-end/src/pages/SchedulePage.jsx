@@ -6,17 +6,23 @@ import CalendarTab from '../components/schedule-page/Calendar';
 import Title from '../components/global/Title';
 import { Calendar } from 'lucide-react';
 
-const SchedulePage = () => {
+const SchedulePage = ({ user, onUpdateUser }) => {
+  const userSchedules = user?.schedules || {};
+  
   return (
     <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
-      <NavigationUp/>
+      <NavigationUp user={user} />
       <Title 
         Title={"Schedule and Presence"}
         SubTitle={"Your schedule and presence during the program"}
         Icon={Calendar}
       />
       <SectionContainer>
-        <CalendarTab/>
+        <CalendarTab 
+          user={user}
+          schedules={userSchedules}
+          onUpdateUser={onUpdateUser}
+        />
       </SectionContainer>
       <NavigationDown/>
     </div>
