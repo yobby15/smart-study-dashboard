@@ -12,22 +12,24 @@ const ModalContent = ({ schedules, onEditItem, onDeleteItem }) => {
 
   return (
     <div className="space-y-4 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
-      {schedules.map((item, index) => {
+      {schedules.map((item) => { 
         const displayTime = item.startTime === "All Day" 
           ? "All Day" 
           : `${item.startTime} - ${item.endTime}`;
 
         return (
           <ScheduleItem 
-            key={index} 
+            key={item.id} 
             title={item.title} 
             time={displayTime} 
+            
             onDelete={() => {
               if (window.confirm(`Delete "${item.title}"?`)) {
-                onDeleteItem(index);
+                onDeleteItem(item);
               }
             }}
-            onEdit={() => onEditItem(item, index)} 
+            
+            onEdit={() => onEditItem(item)} 
           />
         );
       })}

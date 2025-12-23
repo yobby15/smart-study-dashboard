@@ -4,11 +4,17 @@ const NotesHomeCard = ({ user }) => {
   if (!user) return null;
 
   const today = new Date();
-  const dateKey = today.toISOString().split('T')[0]; 
+  
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const dateKey = `${year}-${month}-${day}`; 
 
   const notes = [];
 
-  const todayAttendance = user.attendance?.[dateKey];
+  const todayAttendance = Array.isArray(user.attendance)
+    ? user.attendance.find(item => item.date === dateKey)
+    : null;
   
   if (todayAttendance) {
     notes.push({
@@ -31,7 +37,7 @@ const NotesHomeCard = ({ user }) => {
   }
 
   const inProgressTasks = user.tasks?.filter(t => t.status === "In Progress");
-  if (overdueTasks?.length === 0 && inProgressTasks?.length > 0) {
+  if ((!overdueTasks || overdueTasks.length === 0) && inProgressTasks?.length > 0) {
     notes.push({
       text: `Reminder: Focus on "${inProgressTasks[0].title}".`,
       type: "info"

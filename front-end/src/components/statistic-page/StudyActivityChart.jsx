@@ -17,7 +17,8 @@ const calculateHours = (start, end) => {
 };
 
 const StudyActivityChart = ({ user }) => {
-  const schedules = user?.schedules || {};
+  const schedules = Array.isArray(user?.schedules) ? user.schedules : [];
+  
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const data = [];
   const today = new Date();
@@ -26,10 +27,14 @@ const StudyActivityChart = ({ user }) => {
       const d = new Date();
       d.setDate(today.getDate() - i);
       
-      const dateKey = d.toISOString().split('T')[0]; 
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const dayDate = String(d.getDate()).padStart(2, '0');
+      const dateKey = `${year}-${month}-${dayDate}`;
+      
       const dayName = days[d.getDay()];
 
-      const dailySchedule = schedules[dateKey] || [];
+      const dailySchedule = schedules.filter(item => item.date === dateKey);
       
       const totalHours = dailySchedule.reduce((acc, item) => {
           return acc + calculateHours(item.startTime, item.endTime);

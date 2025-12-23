@@ -16,7 +16,9 @@ const ScheduleHome = ({ user }) => {
     year: 'numeric' 
   });
 
-  const rawSchedules = user?.schedules?.[dateKey] || [];
+  const rawSchedules = Array.isArray(user?.schedules) 
+    ? user.schedules.filter(item => item.date === dateKey)
+    : [];
 
   const formattedSchedules = rawSchedules.map(item => {
     let timeString = "";
@@ -28,6 +30,7 @@ const ScheduleHome = ({ user }) => {
     }
 
     return {
+      id: item.id, 
       title: item.title,
       time: timeString
     };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 
 const AddScheduleSection = ({ onBack, initialData, onSave }) => {
   const [task, setTask] = useState(initialData?.title || "");
@@ -6,7 +6,6 @@ const AddScheduleSection = ({ onBack, initialData, onSave }) => {
   const [endTime, setEndTime] = useState(initialData?.endTime || "");
 
   const handleSubmit = () => {
-    // Validasi sederhana
     if (!task) return alert("Activity cannot be empty!");
     if (!startTime && startTime !== "All Day") return alert("Start time required!");
 

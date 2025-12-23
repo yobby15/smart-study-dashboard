@@ -10,14 +10,16 @@ export const DUMMY_USERS = [
     semester: 8,
     mentor: "Pak Asep Suherman",
     lecturer: "Prof. Budi Darmawan",
-    
-    attendance: {
-      "2025-12-22": { 
+
+    attendance: [
+      { 
+        id: 1,
+        date: "2025-12-22",
         emoji: "🙂", 
         note: "Weekly standup berjalan lancar, server aman.", 
         timestamp: "09:05" 
       }
-    },
+    ],
 
     tasks: [
       { id: 1, title: "Review Server Logs", status: "In Progress" },
@@ -55,30 +57,17 @@ export const DUMMY_USERS = [
       }
     ],
 
-    schedules: {
-      "2025-12-22": [ 
-        { title: "Weekly Standup", startTime: "09:00", endTime: "10:00" },
-        { title: "Review Server Logs", startTime: "10:30", endTime: "12:00" }
-      ],
-      "2025-12-23": [ 
-        { title: "Client Meeting", startTime: "13:00", endTime: "14:30" },
-        { title: "Database Optimization", startTime: "15:00", endTime: "17:00" }
-      ],
-      "2025-12-24": [ 
-        { title: "Pre-Holiday Deployment", startTime: "08:00", endTime: "11:00" },
-        { title: "Office Gathering", startTime: "16:00", endTime: "18:00" }
-      ],
-      "2025-12-25": [ 
-        { title: "Cuti Bersama (Christmas)", startTime: "All Day", endTime: "" }
-      ],
-      "2025-12-26": [ 
-        { title: "Monitoring System", startTime: "10:00", endTime: "11:00" }
-      ],
-      "2025-12-27": [ 
-        { title: "Urgent Patch (On Call)", startTime: "20:00", endTime: "21:00" }
-      ],
-      "2025-12-28": [] 
-    }
+    schedules: [
+      { id: 1, date: "2025-12-22", title: "Weekly Standup", startTime: "09:00", endTime: "10:00" },
+      { id: 2, date: "2025-12-22", title: "Review Server Logs", startTime: "10:30", endTime: "12:00" },
+      { id: 3, date: "2025-12-23", title: "Client Meeting", startTime: "13:00", endTime: "14:30" },
+      { id: 4, date: "2025-12-23", title: "Database Optimization", startTime: "15:00", endTime: "17:00" },
+      { id: 5, date: "2025-12-24", title: "Pre-Holiday Deployment", startTime: "08:00", endTime: "11:00" },
+      { id: 6, date: "2025-12-24", title: "Office Gathering", startTime: "16:00", endTime: "18:00" },
+      { id: 7, date: "2025-12-25", title: "Cuti Bersama (Christmas)", startTime: "All Day", endTime: "" },
+      { id: 8, date: "2025-12-26", title: "Monitoring System", startTime: "10:00", endTime: "11:00" },
+      { id: 9, date: "2025-12-27", title: "Urgent Patch (On Call)", startTime: "20:00", endTime: "21:00" }
+    ]
   },
 
   {
@@ -93,18 +82,22 @@ export const DUMMY_USERS = [
     mentor: "Kak Budi Santoso",
     lecturer: "Dr. Siti Aminah, M.Kom",
     
-    attendance: {
-      "2025-12-22": { 
+    attendance: [
+      { 
+        id: 10,
+        date: "2025-12-22",
         emoji: "😐", 
         note: "Hadir, tapi kurang tidur ngerjain tugas.", 
         timestamp: "07:55" 
       },
-      "2025-12-23": { 
+      { 
+        id: 11,
+        date: "2025-12-23",
         emoji: "🙂", 
         note: "Siap untuk Quiz Logic Gate!", 
         timestamp: "08:50" 
       }
-    },
+    ],
 
     tasks: [
       { id: 98, title: "Quiz: HTML Structure", status: "Completed", score: 80 },
@@ -136,34 +129,20 @@ export const DUMMY_USERS = [
       }
     ],
     
-    schedules: {
-      "2025-12-22": [
-        { title: "Kuliah: Web Programming", startTime: "08:00", endTime: "10:00" },
-        { title: "Praktikum: React Basics", startTime: "10:30", endTime: "12:30" },
-        { title: "Kerja Kelompok", startTime: "14:00", endTime: "16:00" }
-      ],
-      "2025-12-23": [
-        { title: "Kuliah: Algoritma", startTime: "09:00", endTime: "11:00" },
-        { title: "Quiz 1: Logic Gate", startTime: "13:00", endTime: "14:00" }
-      ],
-      "2025-12-24": [ 
-        { title: "Mentoring Session", startTime: "10:00", endTime: "11:00" },
-        { title: "Submission Deadline", startTime: "23:59", endTime: "" } 
-      ],
-      "2025-12-25": [
-        { title: "Libur Natal", startTime: "All Day", endTime: "" }
-      ],
-      "2025-12-26": [ 
-        { title: "Workshop UI/UX", startTime: "13:00", endTime: "16:00" }
-      ],
-      "2025-12-27": [ 
-        { title: "Ekskul Badminton", startTime: "08:00", endTime: "11:00" },
-        { title: "Belajar Mandiri", startTime: "19:00", endTime: "21:00" }
-      ],
-      "2025-12-28": [ 
-        { title: "Review Materi Mingguan", startTime: "09:00", endTime: "10:00" }
-      ]
-    }
+    schedules: [
+      { id: 20, date: "2025-12-22", title: "Kuliah: Web Programming", startTime: "08:00", endTime: "10:00" },
+      { id: 21, date: "2025-12-22", title: "Praktikum: React Basics", startTime: "10:30", endTime: "12:30" },
+      { id: 22, date: "2025-12-22", title: "Kerja Kelompok", startTime: "14:00", endTime: "16:00" },
+      { id: 23, date: "2025-12-23", title: "Kuliah: Algoritma", startTime: "09:00", endTime: "11:00" },
+      { id: 24, date: "2025-12-23", title: "Quiz 1: Logic Gate", startTime: "13:00", endTime: "14:00" },
+      { id: 25, date: "2025-12-24", title: "Mentoring Session", startTime: "10:00", endTime: "11:00" },
+      { id: 26, date: "2025-12-24", title: "Submission Deadline", startTime: "23:59", endTime: "" },
+      { id: 27, date: "2025-12-25", title: "Libur Natal", startTime: "All Day", endTime: "" },
+      { id: 28, date: "2025-12-26", title: "Workshop UI/UX", startTime: "13:00", endTime: "16:00" },
+      { id: 29, date: "2025-12-27", title: "Ekskul Badminton", startTime: "08:00", endTime: "11:00" },
+      { id: 30, date: "2025-12-27", title: "Belajar Mandiri", startTime: "19:00", endTime: "21:00" },
+      { id: 31, date: "2025-12-28", title: "Review Materi Mingguan", startTime: "09:00", endTime: "10:00" }
+    ]
   }
 ];
 
