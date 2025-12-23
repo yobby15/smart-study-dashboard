@@ -1,0 +1,25 @@
+exports.up = (pgm) => {
+  pgm.createTable('users', {
+  id: {
+    type: 'VARCHAR(50)',
+    primaryKey: true,
+  },
+  email: {
+    type: 'VARCHAR(255)',
+    unique: true,
+    notNull: true,
+  },
+  password: {
+    type: 'TEXT',
+    notNull: true,
+  },
+  name: {
+    type: 'TEXT',
+    notNull: true,
+  },
+});
+};
+
+exports.down = (pgm) => {
+  pgm.dropTable('users');
+};
