@@ -57,8 +57,13 @@ const getUserHandlerById = async (req, res, next) => {
 const deleteUserHandlerById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { id: credentialId} = req.user;
     
-    const user  = await usersService.deleteUserById(id);
+    if (id !== credentialId) {
+      throw new AuthorizationError('Anda tidak berhak menghapus akun ini');
+    }
+
+    await usersService.deleteUserById(id);
 
     return res.json({
       status: 'success',

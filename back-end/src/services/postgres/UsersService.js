@@ -9,15 +9,15 @@ class UsersService {
     this._pool = new Pool();
   }
 
-  async addUser({ email, password, name }) {
+  async addUser({ email, password, name, id_program, program, university, semester, lecturer }) {
     await this.verifyNewEmail(email);
 
     const id = `user-${nanoid(16)}`;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id',
-      values: [id, email, hashedPassword, name],
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
+      values: [id, email, hashedPassword, name, id_program, program, university, semester, lecturer],
     };
 
     const result = await this._pool.query(query);
@@ -59,7 +59,7 @@ class UsersService {
       throw new NotFoundError('User tidak ditemukan')
     }
 
-    return result.rows[0]
+    return result.rows[0];
   }
 
   async deleteUserById(id) {

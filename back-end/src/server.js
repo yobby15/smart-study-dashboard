@@ -2,12 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-// const authMiddleware = require('./middlewares/authMiddleware');
+const authMiddleware = require('./middlewares/authMiddleware');
 
 const errorHandler = require('./middlewares/errorHandler');
 
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const classRoutes = require('./routes/classRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/users', userRoutes);
 app.use('/authentications', authRoutes);
+app.use('/classes', authMiddleware, classRoutes);
 
 app.use(errorHandler);
 

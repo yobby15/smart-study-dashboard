@@ -1,8 +1,8 @@
 exports.up = (pgm) => {
   pgm.createTable('tasks', {
-    id: { type: 'SERIAL', primaryKey: true },
+    id: { type: 'VARCHAR(50)', primaryKey: true },
     user_id: {
-      type: 'INTEGER',
+      type: 'VARCHAR(50)',
       notNull: true,
       references: '"users"',
       onDelete: 'CASCADE',

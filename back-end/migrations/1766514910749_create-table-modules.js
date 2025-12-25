@@ -1,8 +1,8 @@
 exports.up = (pgm) => {
   pgm.createTable('modules', {
-    id: { type: 'SERIAL', primaryKey: true },
+    id: { type: 'VARCHAR(50)', primaryKey: true },
     class_id: {
-      type: 'INTEGER',
+      type: 'VARCHAR(50)',
       notNull: true,
       references: '"classes"',
       onDelete: 'CASCADE', 
