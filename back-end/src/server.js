@@ -9,6 +9,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const classRoutes = require('./routes/classRoutes');
+const moduleRoutes = require('./routes/moduleRoutes')
 
 app.use(cors());
 app.use(express.json());
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 app.use('/users', userRoutes);
 app.use('/authentications', authRoutes);
 app.use('/classes', authMiddleware, classRoutes);
+app.use('/modules', authMiddleware, moduleRoutes);
 
 app.use(errorHandler);
 

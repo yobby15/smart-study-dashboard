@@ -9,6 +9,8 @@ const postClassHandler = async (req, res, next) => {
 
     const user_id = req.user.id
     const { title, percentage } = req.body;
+
+    await classesService.verifyClassOwner(class_id, req.user.id);
     
     if (!user_id) {
       return res.status(401).json({ error: 'User tidak dikenal' })

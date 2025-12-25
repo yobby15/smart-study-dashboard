@@ -30,10 +30,10 @@ class ClassService {
     return result.rows;
   }
 
-  async getClassById(classId) {
+  async getClassById(class_id) {
     const query = {
       text: 'SELECT id, title, percentage FROM classes WHERE id = $1',
-      values: [classId],
+      values: [class_id],
     };
 
     const result = await this._pool.query(query);
