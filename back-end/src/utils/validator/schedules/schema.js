@@ -13,4 +13,6 @@ const SchedulePayloadSchema = Joi.object({
     .messages({ 'string.pattern.base': '"end_time" must be in HH:mm format' }),
 });
 
-module.exports = { SchedulePayloadSchema };
+const SchedulesArraySchema = Joi.array().items(SchedulePayloadSchema);
+
+module.exports = { SchedulePayloadSchema, SchedulesArraySchema };

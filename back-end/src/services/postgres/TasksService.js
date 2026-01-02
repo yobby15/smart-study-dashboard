@@ -10,7 +10,6 @@ class TasksService {
   }
 
   async addTask({ user_id, title, status, score }) {
-    // Mengubah prefix menjadi 'task-'
     const id = `task-${nanoid(16)}`;
 
     const query = {
@@ -26,7 +25,6 @@ class TasksService {
     return result.rows[0].id;
   }
 
-  // Mengambil tasks berdasarkan user_id (Best Practice: jangan ambil semua data tabel)
   async getTasks(user_id) {
     const query = {
       text: 'SELECT id, title, status, score FROM tasks WHERE user_id = $1',

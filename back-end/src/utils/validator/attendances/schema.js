@@ -7,4 +7,6 @@ const AttendancePayloadSchema = Joi.object({
   timestamp: Joi.string().max(10).required(),
 });
 
-module.exports = { AttendancePayloadSchema };
+const AttendancesArraySchema = Joi.array().items(AttendancePayloadSchema);
+
+module.exports = { AttendancePayloadSchema, AttendancesArraySchema };

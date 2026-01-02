@@ -5,26 +5,51 @@ const schedulesService = new SchedulesService();
 
 const postScheduleHandler = async (req, res, next) => {
   try {
-    SchedulesValidator.validateSchedulePayload(req.body);
-
     const { id: credentialId } = req.user; 
-    const { title, date, start_time, end_time } = req.body; 
 
-    const scheduleId = await schedulesService.addSchedule({ 
-      user_id: credentialId, 
-      title, 
-      date, 
-      start_time, 
-      end_time 
-    });
+    if (Array.isArray(req.body)) {
+      SchedulesValidator.validateSchedulesArrayPayload(req.body);
 
-    return res.status(201).json({
-      status: 'success',
-      message: 'Schedule berhasil ditambahkan',
-      data: {
-        scheduleId,
-      },
-    });
+      const insertPromises = req.body.map((item) => {
+        return schedulesService.addSchedule({ 
+          user_id: credentialId, 
+          title: item.title, 
+          date: item.date, 
+          start_time: item.start_time, 
+          end_time: item.end_time 
+        });
+      });
+
+      const scheduleIds = await Promise.all(insertPromises);
+
+      return res.status(201).json({
+        status: 'success',
+        message: `${scheduleIds.length} Schedules berhasil ditambahkan`,
+        data: { scheduleIds },
+      });
+
+    } else {
+      SchedulesValidator.validateSchedulePayload(req.body);
+      
+      const { title, date, start_time, end_time } = req.body; 
+
+      const scheduleId = await schedulesService.addSchedule({ 
+        user_id: credentialId, 
+        title, 
+        date, 
+        start_time, 
+        end_time 
+      });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'Schedule berhasil ditambahkan',
+        data: {
+          scheduleId,
+        },
+      });
+    }
+
   } catch (error) {
     next(error);
   }

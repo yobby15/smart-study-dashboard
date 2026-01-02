@@ -5,25 +5,49 @@ const tasksService = new TasksService();
 
 const postTaskHandler = async (req, res, next) => {
   try {
-    TasksValidator.validateTaskPayload(req.body);
-
     const { id: credentialId } = req.user; 
-    const { title, status, score } = req.body; 
 
-    const taskId = await tasksService.addTask({ 
-      user_id: credentialId, 
-      title, 
-      status, 
-      score 
-    });
+    if (Array.isArray(req.body)) {
+      TasksValidator.validateTasksArrayPayload(req.body);
 
-    return res.status(201).json({
-      status: 'success',
-      message: 'Task berhasil ditambahkan',
-      data: {
-        taskId,
-      },
-    });
+      const insertPromises = req.body.map((item) => {
+        return tasksService.addTask({ 
+          user_id: credentialId, 
+          title: item.title, 
+          status: item.status, 
+          score: item.score 
+        });
+      });
+
+      const taskIds = await Promise.all(insertPromises);
+
+      return res.status(201).json({
+        status: 'success',
+        message: `${taskIds.length} Tasks berhasil ditambahkan`,
+        data: { taskIds },
+      });
+
+    } else {
+      TasksValidator.validateTaskPayload(req.body);
+      
+      const { title, status, score } = req.body; 
+
+      const taskId = await tasksService.addTask({ 
+        user_id: credentialId, 
+        title, 
+        status, 
+        score 
+      });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'Task berhasil ditambahkan',
+        data: {
+          taskId,
+        },
+      });
+    }
+
   } catch (error) {
     next(error);
   }

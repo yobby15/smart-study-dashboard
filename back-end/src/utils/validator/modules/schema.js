@@ -6,4 +6,6 @@ const ModulePayloadSchema = Joi.object({
   class_id: Joi.string().max(50).required(),
 });
 
-module.exports = { ModulePayloadSchema };
+const ModulesArraySchema = Joi.array().items(ModulePayloadSchema);
+
+module.exports = { ModulePayloadSchema, ModulesArraySchema };

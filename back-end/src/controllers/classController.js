@@ -5,26 +5,39 @@ const classesService = new ClassService();
 
 const postClassHandler = async (req, res, next) => {
   try {
-    ClassesValidator.validateClassPayload(req.body);
+    const user_id = req.user.id;
 
-    const user_id = req.user.id
-    const { title, percentage } = req.body;
+    if (Array.isArray(req.body)) {
+      ClassesValidator.validateClassesArrayPayload(req.body);
 
-    await classesService.verifyClassOwner(class_id, req.user.id);
-    
-    if (!user_id) {
-      return res.status(401).json({ error: 'User tidak dikenal' })
+      const insertPromises = req.body.map((item) => {
+        return classesService.addClass({ 
+            user_id, 
+            title: item.title, 
+            percentage: item.percentage 
+        });
+      });
+
+      const classIds = await Promise.all(insertPromises);
+
+      return res.status(201).json({
+        status: 'success',
+        message: `${classIds.length} Classes berhasil ditambahkan`,
+        data: { classIds },
+      });
+
+    } else {
+      ClassesValidator.validateClassPayload(req.body);
+      const { title, percentage } = req.body;
+      const class_id = await classesService.addClass({ user_id, title, percentage });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'Class berhasil ditambahkan',
+        data: { class_id },
+      });
     }
 
-    const class_id = await classesService.addClass({ user_id, title, percentage });
-
-    return res.status(201).json({
-      status: 'success',
-      message: 'Class berhasil ditambahkan',
-      data: {
-        class_id
-      },
-    });
   } catch (error) {
     next(error);
   }

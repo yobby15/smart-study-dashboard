@@ -10,7 +10,7 @@ class ClassService {
   }
 
   async addClass({ user_id, title, percentage }) {
-    const id = `user-${nanoid(16)}`;
+    const id = `class-${nanoid(16)}`;
 
     const query = {
       text: 'INSERT INTO classes VALUES($1, $2, $3, $4) RETURNING id',

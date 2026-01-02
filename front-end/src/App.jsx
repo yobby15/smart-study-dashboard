@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
@@ -8,101 +8,58 @@ import ClassPage from './pages/ClassPage';
 import SchedulePage from "./pages/SchedulePage";
 import StatisticPage from './pages/StatisticPage';
 import ProfilePage from './pages/ProfilePage';
-import { DUMMY_USERS } from "./data/users";
+// HAPUS DUMMY_USERS, ganti dengan API
+import { getUserLogged, putAccessToken, login } from './utils/api'; 
 import LocaleContext from './contexts/LocaleContext';
 import ThemeContext from './contexts/ThemeContext';
 
 function App() {
   const navigate = useNavigate();
 
-  const [authUser, setAuthUser] = useState(() => {
-    const sessionUser = sessionStorage.getItem('authUser');
-    if (sessionUser) return JSON.parse(sessionUser);
+  const [authUser, setAuthUser] = useState(null);
 
-    const localDataString = localStorage.getItem('authUser');
-    if (localDataString) {
-      try {
-        const localData = JSON.parse(localDataString);
+  const [initializing, setInitializing] = useState(true);
 
-        if (localData.expiry) {
-          const now = new Date().getTime();
-          
-          if (now > localData.expiry) {
-            localStorage.removeItem('authUser'); 
-            return null; 
-          }
-          
-          return localData.value; 
-        }
-
-        return localData; 
-      } catch {
-        return null;
-      }
+  useEffect(() => {
+    async function initData() {
+      const { data } = await getUserLogged();
+      
+      setAuthUser(data); 
+      setInitializing(false); 
     }
 
-    return null;
-  });
+    initData();
+  }, []);
 
-  const onLoginSuccess = ({ email, password, rememberMe }) => {
-    const foundUser = DUMMY_USERS.find(
-      (user) => user.email === email && user.password === password
-    );
+  const onLoginSuccess = async ({ email, password }) => {
+    // Panggil API Login
+    const { error, data } = await login({ email, password });
 
-    if (foundUser) {
-      setAuthUser(foundUser);
+    if (!error) {
+      putAccessToken(data);
 
-      if (rememberMe) {
-        const now = new Date().getTime();
-        const expiryTime = now + (30 * 24 * 60 * 60 * 1000); // 30 Hari dalam milidetik
-        
-        const dataToStore = {
-          value: foundUser,
-          expiry: expiryTime
-        };
-        localStorage.setItem('authUser', JSON.stringify(dataToStore));
-      } else {
-        sessionStorage.setItem('authUser', JSON.stringify(foundUser));
-      }
+      const { data: user } = await getUserLogged();
       
+      setAuthUser(user);
       navigate('/home');
-    } else {
-      alert('Invalid email or password');
     }
   };
 
   const onLogout = () => {
     setAuthUser(null);
-    localStorage.removeItem('authUser');
-    sessionStorage.removeItem('authUser');
+    putAccessToken(''); 
     navigate('/');
   }
 
   const updateUserData = (updatedFields) => {
     if (!authUser) return;
-
     const updatedUser = { ...authUser, ...updatedFields };
     setAuthUser(updatedUser);
-
-    const localDataString = localStorage.getItem('authUser');
-
-    if (localDataString) {
-      try {
-        const oldData = JSON.parse(localDataString);
-        
-        if (oldData.expiry) {
-           const newData = { ...oldData, value: updatedUser };
-           localStorage.setItem('authUser', JSON.stringify(newData));
-        } else {
-           localStorage.setItem('authUser', JSON.stringify(updatedUser));
-        }
-      } catch {
-        localStorage.setItem('authUser', JSON.stringify(updatedUser));
-      }
-    } else {
-      sessionStorage.setItem('authUser', JSON.stringify(updatedUser));
-    }
   };
+
+  if (initializing) {
+    return null; 
+  }
 
   if (!authUser) {
     return (

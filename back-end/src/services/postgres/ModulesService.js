@@ -10,7 +10,7 @@ class ModulesService {
   }
 
   async addModule({ class_id, title, status }) {
-    const id = `user-${nanoid(16)}`;
+    const id = `module-${nanoid(16)}`;
 
     const query = {
       text: 'INSERT INTO modules VALUES($1, $2, $3, $4) RETURNING id',

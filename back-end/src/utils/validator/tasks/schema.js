@@ -6,4 +6,6 @@ const TaskPayloadSchema = Joi.object({
   score: Joi.number().integer(),
 });
 
-module.exports = { TaskPayloadSchema };
+const TasksArraySchema = Joi.array().items(TaskPayloadSchema);
+
+module.exports = { TaskPayloadSchema, TasksArraySchema };

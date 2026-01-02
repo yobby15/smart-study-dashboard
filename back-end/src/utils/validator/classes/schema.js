@@ -5,4 +5,6 @@ const ClassPayloadSchema = Joi.object({
   percentage: Joi.number().integer().min(0).max(100).required(),
 });
 
-module.exports = { ClassPayloadSchema };
+const ClassesArraySchema = Joi.array().items(ClassPayloadSchema);
+
+module.exports = { ClassPayloadSchema, ClassesArraySchema };

@@ -10,13 +10,12 @@ const postAuthenticationHandler = async (req, res, next) => {
   try {
     AuthenticationsValidator.validatePostAuthenticationPayload(req.body);
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    const id = await usersService.verifyUserCredential(username, password);
+    const id = await usersService.verifyUserCredential(email, password);
 
     const accessToken = TokenManager.generateAccessToken({ id });
     const refreshToken = TokenManager.generateRefreshToken({ id });
-
     await authenticationsService.addRefreshToken(refreshToken);
 
     return res.status(201).json({

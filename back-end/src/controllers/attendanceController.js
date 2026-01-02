@@ -5,27 +5,51 @@ const attendancesService = new AttendancesService();
 
 const postAttendanceHandler = async (req, res, next) => {
   try {
-    AttendancesValidator.validateAttendancePayload(req.body);
+    const { id: credentialId } = req.user;
 
-    const { id: credentialId } = req.user; 
-    
-    const { date, emoji, note, timestamp } = req.body; 
+    if (Array.isArray(req.body)) {
+      AttendancesValidator.validateAttendancesArrayPayload(req.body);
 
-    const attendanceId = await attendancesService.addAttendance({ 
-      user_id: credentialId, 
-      date, 
-      emoji, 
-      note, 
-      timestamp 
-    });
+      const insertPromises = req.body.map((item) => {
+        return attendancesService.addAttendance({ 
+          user_id: credentialId, 
+          date: item.date, 
+          emoji: item.emoji, 
+          note: item.note, 
+          timestamp: item.timestamp 
+        });
+      });
 
-    return res.status(201).json({
-      status: 'success',
-      message: 'Attendance berhasil ditambahkan',
-      data: {
-        attendanceId,
-      },
-    });
+      const attendanceIds = await Promise.all(insertPromises);
+
+      return res.status(201).json({
+        status: 'success',
+        message: `${attendanceIds.length} Attendance berhasil ditambahkan`,
+        data: { attendanceIds },
+      });
+
+    } else {
+      AttendancesValidator.validateAttendancePayload(req.body);
+      
+      const { date, emoji, note, timestamp } = req.body; 
+
+      const attendanceId = await attendancesService.addAttendance({ 
+        user_id: credentialId, 
+        date, 
+        emoji, 
+        note, 
+        timestamp 
+      });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'Attendance berhasil ditambahkan',
+        data: {
+          attendanceId,
+        },
+      });
+    }
+
   } catch (error) {
     next(error);
   }

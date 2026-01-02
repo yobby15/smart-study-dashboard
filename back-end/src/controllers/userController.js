@@ -7,8 +7,8 @@ const postUserHandler = async (req, res, next) => {
   try {
     UsersValidator.validateUserPayload(req.body);
 
-    const { email, password, name } = req.body;
-    const userId = await usersService.addUser({ email, password, name });
+    const { email, password, name, id_program, program, university, semester, lecturer } = req.body;
+    const userId = await usersService.addUser({ email, password, name, id_program, program, university, semester, lecturer });
 
     return res.status(201).json({
       status: 'success',
@@ -74,4 +74,21 @@ const deleteUserHandlerById = async (req, res, next) => {
   }
 };
 
-module.exports = { postUserHandler, getUserHandler, getUserHandlerById, deleteUserHandlerById };
+const getUserLoggedHandler = async (req, res, next) => {
+  try {
+    const { id } = req.user; 
+
+    const user = await usersService.getUserById(id);
+
+    return res.json({
+      status: 'success',
+      data: {
+        user,
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { postUserHandler, getUserHandler, getUserHandlerById, deleteUserHandlerById, getUserLoggedHandler };
