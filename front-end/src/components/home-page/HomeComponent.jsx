@@ -6,7 +6,7 @@ import ProgressHome from './ProgressHome';
 const HomeComponent = ({ user }) => {
   return (
     <div>
-      <Title/>
+      <Title user={user} />
       <ScheduleHome user={user}/>
       <ProgressHome user={user}/>
     </div>

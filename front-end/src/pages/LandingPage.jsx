@@ -1,21 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NavigationUp from '../components/global/NavigationUp';
 import LandingImage from '../assets/images/landing-image.png';
 import ButtonLanding from '../components/landing-page/ButtonLanding';
-import { useNavigate } from 'react-router-dom';
+import ThemeContext from '../contexts/ThemeContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext);
+  
   const handleGoToLogin = () => {
     navigate('/login');
   }
 
+  const isDarkMode = theme === 'dark';
+
   return (
-    <div style={{ backgroundImage: `url(${LandingImage})`}} className="w-screen h-screen bg-cover bg-center flex flex-col">
-      <NavigationUp isLandingPage={true}/>
-      
-      <div className="grow"> 
-          <ButtonLanding onClick={handleGoToLogin}/>
+    <div 
+      style={{ backgroundImage: `url(${LandingImage})`}} 
+      className="w-screen h-screen bg-cover bg-center flex flex-col relative"
+    >
+      <div 
+        className={`absolute inset-0 transition-colors duration-500 pointer-events-none ${
+          isDarkMode ? 'bg-black/50' : 'bg-transparent'
+        }`} 
+      />
+
+      <div className="z-10 w-full h-full flex flex-col">
+        <NavigationUp isLandingPage={true}/>
+        
+        <div className="grow"> 
+            <ButtonLanding onClick={handleGoToLogin}/>
+        </div>
       </div>
     </div>
   );

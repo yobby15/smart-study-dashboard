@@ -3,7 +3,7 @@ import ScheduleCard from './ScheduleCard';
 
 const ScheduleList = ({ data }) => {
   return (
-    <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
+    <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
       {data.map((item) => ( 
         <ScheduleCard 
           key={item.id} 

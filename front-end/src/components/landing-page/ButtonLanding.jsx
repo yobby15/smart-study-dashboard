@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import LocaleContext from '../../contexts/LocaleContext';
+import ThemeContext from '../../contexts/ThemeContext';
 
 const ButtonLanding = ({ onClick }) => {
+  const { locale } = useContext(LocaleContext);
+  const { theme } = useContext(ThemeContext);
+
+  const content = {
+    id: 'Mulai perjalananmu',
+    en: 'Start your journey'
+  };
+
+  const isDarkMode = theme === 'dark';
+
+  const buttonStyle = isDarkMode
+    ? "bg-black/40 border-white/10 text-white hover:bg-black/60 hover:shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+    : "bg-white/20 border-white/30 text-[#03045E] hover:bg-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]";
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <button
         onClick={onClick}
-        className="bg-white/20 backdrop-blur-md border border-white/30 rounded-[40px] text-[#03045E] font-bold py-4 px-12 text-[30px] shadow-lg italic w-150 h-20 transition-all duration-300 hover:scale-105 hover:bg-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]"
+        className={`
+          backdrop-blur-md border rounded-[40px] font-bold py-4 px-12 
+          text-xl md:text-[30px] shadow-lg italic w-auto md:w-150 h-auto md:h-20 
+          transition-all duration-300 hover:scale-105 active:scale-95
+          ${buttonStyle}
+        `}
       >
-        Start your journey
+        {content[locale]}
       </button>
     </div>
   );
