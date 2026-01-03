@@ -61,7 +61,9 @@ class ModulesService {
 
   async verifyModuleOwner(module_id, user_id) {
     const query = {
-      text: `SELECT modules.id FROM modules JOIN classes ON modules.class_id = classes.id WHERE modules.id = $1 AND classes.user_id = $2`,
+      text: `SELECT modules.id FROM modules 
+             JOIN classes ON modules.class_id = classes.id 
+             WHERE modules.id = $1 AND classes.user_id = $2`,
       values: [module_id, user_id],
     };
 
@@ -71,11 +73,6 @@ class ModulesService {
       throw new NotFoundError('Module tidak ditemukan');
     }
 
-    const moduleItem = result.rows[0];
-
-    if (moduleItem.class_id != class_id) {
-      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
-    }
   }
 };
 
