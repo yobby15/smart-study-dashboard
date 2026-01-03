@@ -1,5 +1,4 @@
 @import "tailwindcss";
 @theme {
-  /* Ini cara mendaftarkan font Poppins di Tailwind v4 */
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }

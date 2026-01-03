@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import NavigationUp from "../components/global/NavigationUp";
 import NavigationDown from "../components/global/NavigationDown";
@@ -9,11 +9,33 @@ import { BookOpen } from 'lucide-react';
 import ClassCard from '../components/class-page/ClassCard'; 
 import DetailClass from "../components/class-page/DetailClass";
 import { getClasses } from '../utils/api';
+import LocaleContext from '../contexts/LocaleContext';
+import ThemeContext from '../contexts/ThemeContext';
 
 const ClassPage = ({ user }) => {
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedClass, setSelectedClass] = useState(null);
+
+  const { locale } = useContext(LocaleContext);
+  const { theme } = useContext(ThemeContext);
+
+  const isDarkMode = theme === 'dark';
+
+  const content = {
+    id: {
+      title: 'Kelas',
+      subtitle: 'Kelas Anda selama program berlangsung',
+      loading: 'Memuat kelas...',
+      empty: 'Tidak ada kelas yang tersedia.'
+    },
+    en: {
+      title: 'Class',
+      subtitle: 'Your class during the program',
+      loading: 'Loading classes...',
+      empty: 'No classes available.'
+    }
+  };
 
   useEffect(() => {
     async function fetchClassesData() {
@@ -41,22 +63,25 @@ const ClassPage = ({ user }) => {
     setSelectedClass(null);
   };
 
+  const bgClass = isDarkMode ? 'bg-gray-900' : 'bg-[#CAF0F8]';
+  const textInfoClass = isDarkMode ? 'text-gray-400' : 'text-[#03045E]/70';
+
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
+    <div className={`w-full min-h-screen flex flex-col pb-24 transition-colors duration-300 ${bgClass}`}>
       <NavigationUp user={user} />
 
       <Title 
-        Title={"Class"}
-        SubTitle={"Your class during the program"}
+        Title={content[locale].title}
+        SubTitle={content[locale].subtitle}
         Icon={BookOpen}
       />
 
       <SectionContainer>
         {isLoading ? (
-          <div className="text-center text-[#CAF0F8] mt-10">Loading classes...</div>
+          <div className={`text-center mt-10 ${textInfoClass}`}>{content[locale].loading}</div>
         ) : classes.length === 0 ? (
-          <div className="text-center text-[#CAF0F8] mt-10">
-            No classes available.
+          <div className={`text-center mt-10 ${textInfoClass}`}>
+            {content[locale].empty}
           </div>
         ) : (
           classes.map((item) => (

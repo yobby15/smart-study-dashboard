@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NavigationUp from "../components/global/NavigationUp";
 import NavigationDown from "../components/global/NavigationDown";
 import SectionContainer from "../components/global/SectionContainer";
@@ -6,13 +6,48 @@ import CalendarTab from '../components/schedule-page/Calendar';
 import Title from '../components/global/Title';
 import { Calendar } from 'lucide-react';
 import { getSchedules, addSchedule, deleteSchedule, updateSchedule, getAttendances, addAttendance } from '../utils/api';
+import LocaleContext from '../contexts/LocaleContext';
+import ThemeContext from '../contexts/ThemeContext';
 
 const SchedulePage = ({ user }) => {
   const [schedulesList, setSchedulesList] = useState([]);
   const [attendancesList, setAttendancesList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-async function fetchAllData() {
+  const { locale } = useContext(LocaleContext);
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === 'dark';
+
+  const content = {
+    id: {
+      title: 'Jadwal dan Absensi',
+      subtitle: 'Jadwal dan kehadiran Anda selama program',
+      loading: 'Memuat kalender...',
+      successAdd: 'Jadwal berhasil ditambahkan!',
+      failAdd: 'Gagal menambahkan jadwal.',
+      successEdit: 'Jadwal berhasil diperbarui!',
+      failEdit: 'Gagal memperbarui jadwal.',
+      successDel: 'Jadwal berhasil dihapus!',
+      failDel: 'Gagal menghapus jadwal.',
+      successAtt: 'Absensi berhasil disimpan!',
+      failAtt: 'Gagal menyimpan absensi.'
+    },
+    en: {
+      title: 'Schedule and Presence',
+      subtitle: 'Your schedule and presence during the program',
+      loading: 'Loading calendar...',
+      successAdd: 'Schedule added successfully!',
+      failAdd: 'Failed to add schedule.',
+      successEdit: 'Schedule updated successfully!',
+      failEdit: 'Failed to update schedule.',
+      successDel: 'Schedule deleted successfully!',
+      failDel: 'Failed to delete schedule.',
+      successAtt: 'Attendance saved successfully!',
+      failAtt: 'Failed to save attendance.'
+    }
+  };
+
+  async function fetchAllData() {
     try {
       const { error: errSch, data: dataSch } = await getSchedules();
       if (!errSch) {
@@ -56,11 +91,11 @@ async function fetchAllData() {
     const { error } = await addSchedule(payload);
 
     if (!error) {
-      alert("Jadwal berhasil ditambahkan!");
+      alert(content[locale].successAdd);
       await fetchAllData(); 
       return true;
     } else {
-      alert("Gagal menambahkan jadwal.");
+      alert(content[locale].failAdd);
       return false;
     }
   };
@@ -76,11 +111,11 @@ async function fetchAllData() {
     const { error } = await updateSchedule(id, payload);
 
     if (!error) {
-      alert("Jadwal berhasil diperbarui!");
-      await fetchAllData(); // Refresh data
+      alert(content[locale].successEdit);
+      await fetchAllData(); 
       return true;
     } else {
-      alert("Gagal memperbarui jadwal.");
+      alert(content[locale].failEdit);
       return false;
     }
   };
@@ -89,10 +124,10 @@ async function fetchAllData() {
     const { error } = await deleteSchedule(id);
 
     if (!error) {
-      alert("Jadwal berhasil dihapus!");
+      alert(content[locale].successDel);
       await fetchAllData();
     } else {
-      alert("Gagal menghapus jadwal.");
+      alert(content[locale].failDel);
     }
   };
 
@@ -104,31 +139,33 @@ async function fetchAllData() {
       timestamp: attendanceData.timestamp
     };
 
-    console.log("Mengirim data absensi:", payload);
-
     const { error } = await addAttendance(payload);
 
     if (!error) {
-      alert("Absensi berhasil disimpan!");
+      alert(content[locale].successAtt);
       await fetchAllData();
       return true;
     } else {
-      alert("Gagal menyimpan absensi.");
+      alert(content[locale].failAtt);
       return false;
     }
   };
 
+  const bgClass = isDarkMode ? 'bg-gray-900' : 'bg-[#CAF0F8]';
+
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
+    <div className={`w-full min-h-screen flex flex-col pb-24 transition-colors duration-300 ${bgClass}`}>
       <NavigationUp user={user} />
       <Title 
-        Title={"Schedule and Presence"}
-        SubTitle={"Your schedule and presence during the program"}
+        Title={content[locale].title}
+        SubTitle={content[locale].subtitle}
         Icon={Calendar}
       />
       <SectionContainer>
         {isLoading ? (
-          <div className="text-center py-10 text-[#03045E]">Loading calendar...</div>
+          <div className={`text-center py-10 ${isDarkMode ? 'text-gray-400' : 'text-[#03045E]'}`}>
+            {content[locale].loading}
+          </div>
         ) : (
           <CalendarTab 
             user={user}

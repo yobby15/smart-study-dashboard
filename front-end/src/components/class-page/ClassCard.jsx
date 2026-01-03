@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import ThemeContext from '../../contexts/ThemeContext';
 
 const ClassCard = ({ title, percentage }) => {
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === 'dark';
+
+  const titleColor = isDarkMode ? 'text-gray-100' : 'text-[#03045E]';
+  
+  const progressBg = isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-[#CAF0F8] border-[#03045E]/10';
+
+  const progressFill = isDarkMode ? 'bg-[#0096C7]' : 'bg-[#03045E]';
 
   return (
     <div className="flex flex-col p-1">
-      <h3 className="text-[#03045E] font-semibold text-lg">
+      <h3 className={`font-semibold text-lg ${titleColor}`}>
         {title}
       </h3>
 
@@ -16,9 +25,9 @@ const ClassCard = ({ title, percentage }) => {
           {percentage}%
         </div>
 
-        <div className="w-full h-3 bg-[#CAF0F8] rounded-full overflow-hidden border border-[#03045E]/10">
+        <div className={`w-full h-3 rounded-full overflow-hidden border ${progressBg}`}>
           <div 
-            className="h-full bg-[#03045E] rounded-full" 
+            className={`h-full rounded-full transition-all duration-500 ${progressFill}`} 
             style={{ width: `${percentage}%` }} 
           />
         </div>

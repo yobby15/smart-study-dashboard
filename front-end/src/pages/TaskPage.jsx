@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import NavigationUp from "../components/global/NavigationUp";
 import NavigationDown from "../components/global/NavigationDown";  
@@ -9,6 +9,8 @@ import { Notebook } from 'lucide-react';
 import TaskCardContent from "../components/task-page/TaskCardContent";
 import ActivityTabs from '../components/task-page/ActivityTabs'; 
 import { getTasks } from '../utils/api';
+import LocaleContext from '../contexts/LocaleContext';
+import ThemeContext from '../contexts/ThemeContext';
 
 const TaskPage = ({ user }) => {
   const [tasks, setTasks] = useState([]);
@@ -16,6 +18,27 @@ const TaskPage = ({ user }) => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
+
+  const { locale } = useContext(LocaleContext);
+  const { theme } = useContext(ThemeContext);
+  const isDarkMode = theme === 'dark';
+
+  const content = {
+    id: {
+      title: 'Tugas dan Latihan',
+      subtitle: 'Tugas dan latihan Anda selama program berlangsung',
+      loading: 'Memuat tugas...',
+      empty: 'Tidak ada tugas tersedia.',
+      noMatch: 'Tidak ada tugas yang cocok dengan pencarian atau filter.',
+    },
+    en: {
+      title: 'Task and Exercise',
+      subtitle: 'Your task and exercise during the program',
+      loading: 'Loading tasks...',
+      empty: 'No tasks available.',
+      noMatch: 'No tasks match your search or filter.',
+    }
+  };
 
   useEffect(() => {
     async function fetchTasksData() {
@@ -44,13 +67,16 @@ const TaskPage = ({ user }) => {
     return matchesStatus && matchesSearch;
   });
 
+  const bgClass = isDarkMode ? 'bg-gray-900' : 'bg-[#CAF0F8]';
+  const textInfoClass = isDarkMode ? 'text-gray-400' : 'text-[#03045E]';
+
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
+    <div className={`w-full min-h-screen flex flex-col pb-24 transition-colors duration-300 ${bgClass}`}>
       <NavigationUp user={user}/>
 
       <Title 
-        Title={"Task and Exercise"}
-        SubTitle={"Your task and exercise during the program"}
+        Title={content[locale].title}
+        SubTitle={content[locale].subtitle}
         Icon={Notebook}
       />
 
@@ -63,14 +89,14 @@ const TaskPage = ({ user }) => {
 
       <SectionContainer>
         {isLoading ? (
-           <div className="text-center text-[#03045E] mt-10">Loading tasks...</div>
+           <div className={`text-center mt-10 ${textInfoClass}`}>{content[locale].loading}</div>
         ) : tasks.length === 0 ? (
-          <div className="text-center text-[#03045E] mt-10">
-            No tasks available.
+          <div className={`text-center mt-10 ${textInfoClass}`}>
+            {content[locale].empty}
           </div>
         ) : filteredTasks.length === 0 ? (
-          <div className="text-center text-[#03045E] mt-10">
-            No tasks match your search or filter.
+          <div className={`text-center mt-10 ${textInfoClass}`}>
+            {content[locale].noMatch}
           </div>
         ) : (
           filteredTasks.map((item) => (

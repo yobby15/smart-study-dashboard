@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react'; 
+import React, { useEffect, useContext } from 'react'; 
 import PropTypes from 'prop-types'; 
 import NavigationUp from "../components/global/NavigationUp";
 import SectionContainer from "../components/global/SectionContainer";
 import ProfileHeader from "../components/profile-page/ProfileHeader";
 import AcademicInfo from "../components/profile-page/AcademicInfo";
 import LogoutButton from "../components/profile-page/LogoutButton";
+import ThemeContext from '../contexts/ThemeContext';
 
 const ProfilePage = ({ onLogout, user }) => {
+  const { theme } = useContext(ThemeContext);
+
   useEffect(() => {
     if (!user) {
       onLogout();
@@ -27,8 +30,10 @@ const ProfilePage = ({ onLogout, user }) => {
     lecturer: user.lecturer,
   };
 
+  const bgClass = theme === 'dark' ? 'bg-gray-900' : 'bg-[#CAF0F8]';
+
   return (
-    <div className="w-full min-h-screen flex flex-col bg-[#CAF0F8] pb-24">
+    <div className={`w-full min-h-screen flex flex-col pb-24 transition-colors duration-300 ${bgClass}`}>
       <NavigationUp user={user} />
       
       <SectionContainer>
@@ -51,17 +56,7 @@ const ProfilePage = ({ onLogout, user }) => {
 
 ProfilePage.propTypes = {
   onLogout: PropTypes.func.isRequired,
-
-  currentUser: PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.number,
-    nim: PropTypes.string,
-    program: PropTypes.string,
-    university: PropTypes.string,
-    semester: PropTypes.number,
-    mentor: PropTypes.string,
-    lecturer: PropTypes.string,
-  }),
+  user: PropTypes.object
 };
 
 export default ProfilePage;
