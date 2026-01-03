@@ -26,7 +26,7 @@ class ModulesService {
   }
 
   async getModules() {
-    const result = await this._pool.query('SELECT id, title, status FROM modules');
+    const result = await this._pool.query('SELECT id, title, status, class_id FROM modules');
 
     return result.rows;
   }

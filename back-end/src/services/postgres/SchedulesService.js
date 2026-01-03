@@ -51,6 +51,19 @@ class SchedulesService {
     return result.rows[0];
   }
 
+  async editScheduleById(id, { title, date, start_time, end_time }) {
+    const query = {
+      text: 'UPDATE schedules SET title = $1, date = $2, start_time = $3, end_time = $4 WHERE id = $5 RETURNING id',
+      values: [title, date, start_time, end_time, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Gagal memperbarui schedule. Id tidak ditemukan');
+    }
+  }
+
   async deleteScheduleById(id) {
     const query = {
       text: 'DELETE FROM schedules WHERE id = $1 RETURNING id',

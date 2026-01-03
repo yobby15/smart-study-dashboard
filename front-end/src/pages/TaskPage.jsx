@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import NavigationUp from "../components/global/NavigationUp";
 import NavigationDown from "../components/global/NavigationDown";  
@@ -8,15 +8,39 @@ import Title from '../components/global/Title';
 import { Notebook } from 'lucide-react';
 import TaskCardContent from "../components/task-page/TaskCardContent";
 import ActivityTabs from '../components/task-page/ActivityTabs'; 
+import { getTasks } from '../utils/api';
 
 const TaskPage = ({ user }) => {
-  const taskList = user?.tasks || [];
+  const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
 
-  const filteredTasks = taskList.filter((task) => {
-    const matchesStatus = filterStatus === "All" || task.status === filterStatus;
+  useEffect(() => {
+    async function fetchTasksData() {
+      try {
+        const { error, data } = await getTasks();
+        if (!error) {
+          setTasks(data);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil tasks:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchTasksData();
+  }, []);
+
+  const filteredTasks = tasks.filter((task) => {
+    const taskStatus = task.status ? task.status.toLowerCase() : "";
+    const filter = filterStatus.toLowerCase();
+
+    const matchesStatus = filter === "all" || taskStatus === filter;
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
     return matchesStatus && matchesSearch;
   });
 
@@ -38,12 +62,14 @@ const TaskPage = ({ user }) => {
       />
 
       <SectionContainer>
-        {taskList.length === 0 ? (
-          <div className="text-center text-gray-500 mt-10">
-            No tasks available for this user.
+        {isLoading ? (
+           <div className="text-center text-[#03045E] mt-10">Loading tasks...</div>
+        ) : tasks.length === 0 ? (
+          <div className="text-center text-[#03045E] mt-10">
+            No tasks available.
           </div>
         ) : filteredTasks.length === 0 ? (
-          <div className="text-center text-gray-500 mt-10">
+          <div className="text-center text-[#03045E] mt-10">
             No tasks match your search or filter.
           </div>
         ) : (
@@ -64,15 +90,7 @@ const TaskPage = ({ user }) => {
 };
 
 TaskPage.propTypes = {
-  user: PropTypes.shape({
-    tasks: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        title: PropTypes.string,
-        status: PropTypes.string
-      })
-    )
-  })
+  user: PropTypes.object,
 };
 
 export default TaskPage;

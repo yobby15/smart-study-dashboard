@@ -92,6 +92,27 @@ const getScheduleByIdHandler = async (req, res, next) => {
   }
 };
 
+const putScheduleByIdHandler = async (req, res, next) => {
+  try {
+    SchedulesValidator.validateSchedulePayload(req.body);
+
+    const { id } = req.params;
+    const { id: credentialId } = req.user;
+    const { title, date, start_time, end_time } = req.body;
+
+    await schedulesService.verifyScheduleOwner(id, credentialId);
+
+    await schedulesService.editScheduleById(id, { title, date, start_time, end_time });
+
+    return res.json({
+      status: 'success',
+      message: 'Schedule berhasil diperbarui',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteScheduleByIdHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -110,4 +131,4 @@ const deleteScheduleByIdHandler = async (req, res, next) => {
   }
 };
 
-module.exports = { postScheduleHandler, getSchedulesHandler, getScheduleByIdHandler, deleteScheduleByIdHandler };
+module.exports = { postScheduleHandler, getSchedulesHandler, getScheduleByIdHandler, deleteScheduleByIdHandler, putScheduleByIdHandler };

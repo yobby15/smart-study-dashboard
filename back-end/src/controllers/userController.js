@@ -1,5 +1,6 @@
 const UsersService = require('../services/postgres/UsersService');
 const UsersValidator = require('../utils/validator/users');
+const AuthorizationError = require('../exceptions/AuthorizationError');
 
 const usersService = new UsersService();
 
@@ -7,8 +8,8 @@ const postUserHandler = async (req, res, next) => {
   try {
     UsersValidator.validateUserPayload(req.body);
 
-    const { email, password, name, id_program, program, university, semester, lecturer } = req.body;
-    const userId = await usersService.addUser({ email, password, name, id_program, program, university, semester, lecturer });
+    const { email, password, name, id_program, program, university, semester, mentor, lecturer } = req.body;
+    const userId = await usersService.addUser({ email, password, name, id_program, program, university, semester, mentor, lecturer });
 
     return res.status(201).json({
       status: 'success',

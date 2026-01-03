@@ -1,24 +1,19 @@
 import React from 'react';
 
-const NotesHomeCard = ({ user }) => {
-  if (!user) return null;
-
+const NotesHomeCard = ({ tasks = [], attendances = [] }) => {
   const today = new Date();
-  
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const dateKey = `${year}-${month}-${day}`; 
+  const dateKey = today.toLocaleDateString('sv-SE');
 
   const notes = [];
 
-  const todayAttendance = Array.isArray(user.attendance)
-    ? user.attendance.find(item => item.date === dateKey)
-    : null;
+  const todayAttendance = attendances.find(item => {
+    const itemDate = new Date(item.date).toLocaleDateString('sv-SE');
+    return itemDate === dateKey;
+  });
   
   if (todayAttendance) {
     notes.push({
-      text: `Today's Note: "${todayAttendance.note}"`,
+      text: `Today's Note: "${todayAttendance.note || todayAttendance.description || '-'}"`,
       type: "success" 
     });
   } else {
@@ -28,16 +23,16 @@ const NotesHomeCard = ({ user }) => {
     });
   }
 
-  const overdueTasks = user.tasks?.filter(t => t.status === "Overdue");
-  if (overdueTasks?.length > 0) {
+  const overdueTasks = tasks.filter(t => t.status === "Overdue" || t.status === "overdue");
+  if (overdueTasks.length > 0) {
     notes.push({
       text: `Urgent: You have ${overdueTasks.length} overdue task(s).`,
       type: "danger"
     });
   }
 
-  const inProgressTasks = user.tasks?.filter(t => t.status === "In Progress");
-  if ((!overdueTasks || overdueTasks.length === 0) && inProgressTasks?.length > 0) {
+  const inProgressTasks = tasks.filter(t => t.status === "In Progress" || t.status === "in progress");
+  if ((overdueTasks.length === 0) && inProgressTasks.length > 0) {
     notes.push({
       text: `Reminder: Focus on "${inProgressTasks[0].title}".`,
       type: "info"

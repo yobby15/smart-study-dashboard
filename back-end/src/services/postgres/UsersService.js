@@ -10,15 +10,15 @@ class UsersService {
     this._pool = new Pool();
   }
 
-  async addUser({ email, password, name, id_program, program, university, semester, lecturer }) {
+  async addUser({ email, password, name, id_program, program, university, semester, mentor, lecturer }) {
     await this.verifyNewEmail(email);
 
     const id = `user-${nanoid(16)}`;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
-      values: [id, email, hashedPassword, name, id_program, program, university, semester, lecturer],
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
+      values: [id, email, hashedPassword, name, id_program, program, university, semester, mentor, lecturer],
     };
 
     const result = await this._pool.query(query);
@@ -50,14 +50,14 @@ class UsersService {
 
   async getUserById(user_id) {
     const query = {
-      text: 'SELECT id, email, name FROM users WHERE id = $1',
+      text: 'SELECT id, email, name, id_program, program, university, semester, mentor, lecturer FROM users WHERE id = $1',
       values: [user_id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('User tidak ditemukan')
+      throw new NotFoundError('User tidak ditemukan');
     }
 
     return result.rows[0];

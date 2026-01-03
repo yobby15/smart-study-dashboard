@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ClassCard from "./ClassCard";
 import ModuleItem from "./ModuleItem";
+import { getModules } from "../../utils/api";
 
 const DetailClass = ({ isOpen, onClose, data }) => {
+  const [modulesList, setModulesList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchModules() {
+      if (isOpen && data) {
+        setIsLoading(true);
+        const { error, data: allModules } = await getModules();
+
+        if (!error) {
+          const filteredModules = allModules.filter(
+            (modul) => modul.class_id === String(data.id) || modul.class_id === data.id
+          );
+          setModulesList(filteredModules);
+        } else {
+          setModulesList([]);
+        }
+        setIsLoading(false);
+      }
+    }
+
+    fetchModules();
+  }, [isOpen, data]); 
+
   const handleClose = () => {
     onClose();
+    setModulesList([]); 
   }
 
   if (!isOpen) return null;
@@ -19,8 +45,8 @@ const DetailClass = ({ isOpen, onClose, data }) => {
         onClick={(e) => e.stopPropagation()}
       >
         {data ? (
-          <div>
-            <div className="mb-6">
+          <div className="flex flex-col h-full">
+            <div className="mb-6 shrink-0">
                <ClassCard 
                   title={data.title} 
                   percentage={data.percentage} 
@@ -29,8 +55,10 @@ const DetailClass = ({ isOpen, onClose, data }) => {
 
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
               <div className="flex flex-col gap-2">
-                {data.modules && data.modules.length > 0 ? (
-                  data.modules.map((modul) => (
+                {isLoading ? (
+                   <p className="text-center text-[#03045E] py-4">Loading modules...</p>
+                ) : modulesList.length > 0 ? (
+                  modulesList.map((modul) => (
                     <ModuleItem 
                       key={modul.id}
                       title={modul.title}
@@ -44,7 +72,7 @@ const DetailClass = ({ isOpen, onClose, data }) => {
             </div>
           </div>
         ) : (
-          <div className="text-center py-10 text-[#03045E]">Loading data...</div>
+          <div className="text-center py-10 text-[#03045E]">Loading class data...</div>
         )}
 
       </div>

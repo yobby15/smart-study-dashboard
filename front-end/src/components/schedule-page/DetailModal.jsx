@@ -5,7 +5,7 @@ import AttendanceSection from './AttendanceSection';
 import AddScheduleSection from './AddScheduleSection'; 
 import { MONTH_NAMES } from '../../data/users';
 
-const DetailModal = ({ isOpen, onClose, day, month, year, schedules, user, onUpdateUser }) => {
+const DetailModal = ({ isOpen, onClose, day, month, year, schedules, onAddSchedule, onDeleteSchedule, onEditSchedule, attendances, onSaveAttendance }) => {
   const [activeTab, setActiveTab] = useState('none'); 
   const [editingItem, setEditingItem] = useState(null);
 
@@ -18,53 +18,51 @@ const DetailModal = ({ isOpen, onClose, day, month, year, schedules, user, onUpd
   const currentSchedules = Array.isArray(schedules) 
     ? schedules.filter(item => item.date === dateKey) 
     : [];
-  
-  const allAttendance = Array.isArray(user?.attendance) ? user.attendance : [];
-  const todayAttendance = allAttendance.find(item => item.date === dateKey); 
+
+  const allAttendance = Array.isArray(attendances) ? attendances : [];
+  const todayAttendance = allAttendance.find(item => item.date === dateKey);
 
   const dayName = new Date(year, month, day).toLocaleDateString('en-US', { weekday: 'long' });
 
-  const handleDelete = (itemToDelete) => {
-    const newGlobalSchedules = schedules.filter(item => item.id !== itemToDelete.id);
-    onUpdateUser({ schedules: newGlobalSchedules });
+  const handleDelete = async (itemToDelete) => {
+    if(window.confirm(`Are you sure delete "${itemToDelete.title}"?`)){
+       await onDeleteSchedule(itemToDelete.id);
+    }
   };
 
-  const handleSaveSchedule = (itemData) => {
-    let newGlobalSchedules = [...schedules];
+  const handleSaveSchedule = async (itemData) => {
+    let success = false;
+
+    const scheduleData = {
+      title: itemData.title,
+      startTime: itemData.startTime,
+      endTime: itemData.endTime,
+      date: dateKey 
+    };
 
     if (editingItem) {
-      newGlobalSchedules = newGlobalSchedules.map(item => 
-        item.id === editingItem.id 
-          ? { ...item, ...itemData, date: dateKey } 
-          : item
-      );
+      success = await onEditSchedule(editingItem.id, scheduleData);
     } else {
-      const newItem = {
-        ...itemData,
-        id: Date.now(), 
-        date: dateKey   
-      };
-      newGlobalSchedules.push(newItem);
+      success = await onAddSchedule(scheduleData);
     }
 
-    onUpdateUser({ schedules: newGlobalSchedules });
-    setActiveTab('none');
-    setEditingItem(null);
+    if (success) {
+      setActiveTab('none');
+      setEditingItem(null);
+    }
   };
 
-  const handleSaveAttendance = (data) => {
-    let newAttendanceList = [...allAttendance];
-    const existingIndex = newAttendanceList.findIndex(item => item.date === dateKey);
+  const handleSubmitAttendance = async (data) => {
+    const attendanceData = { 
+        ...data,
+        date: dateKey 
+    };
 
-    const attendanceData = { ...data, date: dateKey };
+    const success = await onSaveAttendance(attendanceData);
 
-    if (existingIndex >= 0) {
-      newAttendanceList[existingIndex] = { ...newAttendanceList[existingIndex], ...attendanceData };
-    } else {
-      newAttendanceList.push({ id: Date.now(), ...attendanceData });
+    if (success) {
+      setActiveTab('none'); 
     }
-
-    onUpdateUser({ attendance: newAttendanceList });
   };
 
   const handleEditClick = (item) => {
@@ -93,7 +91,14 @@ const DetailModal = ({ isOpen, onClose, day, month, year, schedules, user, onUpd
         onClick={(e) => e.stopPropagation()}
       >
         
-        <ModalHeader monthName={MONTH_NAMES[month]} year={year} day={day} dayName={dayName} onClose={handleClose} onAddClick={handleAddClick} />
+        <ModalHeader 
+          monthName={MONTH_NAMES[month]} 
+          year={year} 
+          day={day} 
+          dayName={dayName} 
+          onClose={handleClose} 
+          onAddClick={handleAddClick} 
+        />
 
         <div className="relative mt-4 min-h-75">
           <div className={`transition-all duration-500 ${activeTab !== 'none' ? 'opacity-0 pointer-events-none scale-95 blur-sm' : 'opacity-100 scale-100'}`}>
@@ -120,8 +125,8 @@ const DetailModal = ({ isOpen, onClose, day, month, year, schedules, user, onUpd
 
           <div className={`absolute inset-0 bg-[#90E0EF] transition-all duration-500 transform z-10 ${activeTab === 'attendance' ? 'translate-y-0 opacity-100 visible' : 'translate-y-full opacity-0 invisible'}`}>
             <AttendanceSection 
-              existingData={todayAttendance}
-              onSubmit={handleSaveAttendance} 
+              existingData={todayAttendance} 
+              onSubmit={handleSubmitAttendance} 
               onBack={() => setActiveTab('none')} 
             />
           </div>
