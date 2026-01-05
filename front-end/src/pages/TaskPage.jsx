@@ -104,6 +104,7 @@ const TaskPage = ({ user }) => {
               <TaskCardContent 
                 title={item.title} 
                 status={item.status} 
+                url={item.url || "https://www.dicoding.com"}
               />
             </ContentCard>
           ))

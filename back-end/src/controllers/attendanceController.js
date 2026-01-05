@@ -1,5 +1,5 @@
 const AttendancesService = require('../services/postgres/AttendancesService');
-const AttendancesValidator = require('../utils/validator/attendances'); // Pastikan file validator ini ada
+const AttendancesValidator = require('../utils/validator/attendances'); 
 
 const attendancesService = new AttendancesService();
 

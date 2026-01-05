@@ -77,59 +77,65 @@ const DetailModal = ({ isOpen, onClose, day, month, year, schedules, onAddSchedu
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-start justify-center pt-10 p-4 transition-all duration-300 ${isOpen ? 'opacity-100 visible bg-black/60 backdrop-blur-sm' : 'opacity-0 invisible'}`} 
+      className={`fixed inset-0 z-9999 flex items-start justify-center px-4 pt-10 pb-24 transition-all duration-300 ${isOpen ? 'opacity-100 visible bg-black/60 backdrop-blur-sm' : 'opacity-0 invisible'}`} 
       onClick={handleClose}
     >
       <div 
-        className={`rounded-[30px] shadow-2xl p-8 w-full max-w-lg border-2 relative overflow-hidden transition-all duration-300 transform ${modalBg} ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`} 
+        className={`rounded-[30px] shadow-2xl w-full max-w-lg border-2 relative flex flex-col max-h-full overflow-hidden transition-all duration-300 transform ${modalBg} ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`} 
         onClick={(e) => e.stopPropagation()}
       >
-        <ModalHeader 
-          monthName={monthName} 
-          year={year} 
-          day={day} 
-          dayName={dayName} 
-          onClose={handleClose} 
-          onAddClick={() => { setEditingItem(null); setActiveTab('add'); }} 
-        />
+        <div className="flex flex-col h-full overflow-hidden">
+          <div className="shrink-0 p-8 pb-4">
+            <ModalHeader 
+              monthName={monthName} 
+              year={year} 
+              day={day} 
+              dayName={dayName} 
+              onClose={handleClose} 
+              onAddClick={() => { setEditingItem(null); setActiveTab('add'); }} 
+            />
+          </div>
 
-        <div className="mt-4 min-h-75 flex flex-col pb-24">
-          {activeTab === 'none' && (
+          <div className="flex-1 overflow-y-auto px-8 pb-8 custom-scrollbar min-h-0">
             <div className="animate-fade-in">
-               <ModalContent 
-                  schedules={currentSchedules} 
-                  onEditItem={(item) => { setEditingItem(item); setActiveTab('add'); }} 
-                  onDeleteItem={handleDelete}
-              />
-              <div className="mt-8 flex justify-center pb-2">
-                <button onClick={() => setActiveTab('attendance')} className={`px-6 py-2 rounded-xl text-xs font-bold shadow-md transition-all active:scale-95 border ${btnAttBg}`}>
-                  {attendanceButtonText}
-                </button>
-              </div>
-            </div>
-          )}
+              {activeTab === 'none' && (
+                <div>
+                  <ModalContent 
+                    schedules={currentSchedules} 
+                    onEditItem={(item) => { setEditingItem(item); setActiveTab('add'); }} 
+                    onDeleteItem={handleDelete}
+                />
+                  <div className="mt-8 flex justify-center pb-2">
+                      <button onClick={() => setActiveTab('attendance')} className={`px-6 py-2 rounded-xl text-xs font-bold shadow-md transition-all active:scale-95 border ${btnAttBg}`}>
+                        {attendanceButtonText}
+                      </button>
+                  </div>
+                </div>
+              )}
 
-          {activeTab === 'add' && (
-            <div className="animate-fade-in h-full">
-              <AddScheduleSection 
-                key={editingItem ? editingItem.id : 'new-form'}
-                initialData={editingItem} 
-                onSave={handleSaveSchedule}
-                onBack={() => { setActiveTab('none'); setEditingItem(null); }}
-              />
-            </div>
-          )}
+              {activeTab === 'add' && (
+                <div className="h-full">
+                    <AddScheduleSection 
+                      key={editingItem ? editingItem.id : 'new-form'}
+                      initialData={editingItem} 
+                      onSave={handleSaveSchedule}
+                      onBack={() => { setActiveTab('none'); setEditingItem(null); }}
+                    />
+                </div>
+              )}
 
-          {activeTab === 'attendance' && (
-             <div className="animate-fade-in h-full">
-              <AttendanceSection 
-                existingData={todayAttendance} 
-                onSubmit={handleSubmitAttendance} 
-                onBack={() => setActiveTab('none')} 
-              />
+              {activeTab === 'attendance' && (
+                <div className="h-full">
+                  <AttendanceSection 
+                    existingData={todayAttendance} 
+                    onSubmit={handleSubmitAttendance} 
+                    onBack={() => setActiveTab('none')}
+                    selectedDate={dateObject} 
+                  />
+                </div>
+              )}
             </div>
-          )}
-          
+          </div>
         </div>
       </div>
     </div>

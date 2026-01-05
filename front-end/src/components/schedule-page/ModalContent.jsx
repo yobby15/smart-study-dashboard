@@ -47,7 +47,7 @@ const ModalContent = ({ schedules, onEditItem, onDeleteItem }) => {
   }
 
   return (
-    <div className="space-y-4 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
+    <div className="space-y-4">
       {schedules.map((item) => { 
         const displayTime = item.startTime === "All Day" 
           ? (locale === 'id' ? "Sepanjang Hari" : "All Day")

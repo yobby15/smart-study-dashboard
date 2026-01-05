@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import LocaleContext from '../../contexts/LocaleContext';
 import ThemeContext from '../../contexts/ThemeContext';
 
-const TaskCardContent = ({ title, status }) => {
+const TaskCardContent = ({ title, status, url }) => {
   const { locale } = useContext(LocaleContext);
   const { theme } = useContext(ThemeContext);
 
@@ -40,7 +40,12 @@ const TaskCardContent = ({ title, status }) => {
   const titleColor = isDarkMode ? "text-gray-100" : "text-[#03045E]";
 
   return (
-    <div className="flex justify-between items-center w-full px-1">
+    <a 
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex justify-between items-center w-full px-1 cursor-pointer hover:opacity-75 transition-opacity"
+    >
       <h3 className={`font-semibold text-base ${titleColor}`}>
         {title}
       </h3>
@@ -48,7 +53,7 @@ const TaskCardContent = ({ title, status }) => {
       <span className={`font-bold text-xs md:text-sm whitespace-nowrap ml-4 capitalize ${getStatusColor()}`}>
         {displayStatus}
       </span>
-    </div>
+    </a>
   );
 };
 

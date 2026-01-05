@@ -1,14 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import LocaleContext from '../../contexts/LocaleContext';
 import ThemeContext from '../../contexts/ThemeContext';
 
-const AttendanceSection = ({ onBack, onSubmit, existingData }) => {
+const AttendanceSection = ({ onBack, onSubmit, existingData, selectedDate }) => {
   const [note, setNote] = useState(existingData?.note || "");
   const [selectedEmoji, setSelectedEmoji] = useState(existingData?.emoji || null);
   
   const { locale } = useContext(LocaleContext);
   const { theme } = useContext(ThemeContext);
   const isDarkMode = theme === 'dark';
+
+  const isToday = useMemo(() => {
+    if (!selectedDate) return false;
+    const today = new Date();
+    return (
+      selectedDate.getDate() === today.getDate() &&
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
+    );
+  }, [selectedDate]);
 
   const content = {
     id: {
@@ -18,7 +28,11 @@ const AttendanceSection = ({ onBack, onSubmit, existingData }) => {
       time: 'Waktu',
       question: 'Bagaimana perasaanmu hari ini?',
       placeholder: 'Ceritakan harimu...',
-      submitBtn: 'Kirim Absen'
+      submitBtn: 'Kirim Absen',
+      lockedTitle: 'Absensi Ditutup',
+      lockedDesc: 'Absensi hanya dapat dilakukan pada hari ini (Real-time).',
+      futureDesc: 'Anda belum bisa absen untuk tanggal masa depan.',
+      pastDesc: 'Anda tidak dapat melakukan absen susulan untuk tanggal yang sudah lewat.'
     },
     en: {
       back: '← Back to Schedule',
@@ -27,7 +41,11 @@ const AttendanceSection = ({ onBack, onSubmit, existingData }) => {
       time: 'Time',
       question: 'How do you feel today?',
       placeholder: 'Tell us about your day...',
-      submitBtn: 'Submit Attendance'
+      submitBtn: 'Submit Attendance',
+      lockedTitle: 'Attendance Locked',
+      lockedDesc: 'Attendance can only be done today (Real-time).',
+      futureDesc: 'You cannot mark attendance for future dates yet.',
+      pastDesc: 'You cannot mark attendance for past dates.'
     }
   };
 
@@ -46,14 +64,13 @@ const AttendanceSection = ({ onBack, onSubmit, existingData }) => {
   const textLink = isDarkMode ? "text-blue-400 hover:text-blue-300" : "text-[#03045E] hover:text-blue-700";
   const textColor = isDarkMode ? "text-gray-100" : "text-[#03045E]";
   const subTextColor = isDarkMode ? "text-gray-400" : "text-[#03045E]/50";
-  
   const emojiBg = isDarkMode ? "bg-gray-700 border-gray-600" : "bg-[#CAF0F8] border-[#03045E]/10";
   const noteBox = isDarkMode ? "bg-gray-700/50 border-gray-600 text-gray-200" : "bg-white/40 border-[#03045E]/10 text-[#03045E]";
-  
   const inputBg = isDarkMode ? "bg-gray-700/50 border-gray-600 text-gray-200 focus:ring-blue-500" : "bg-[#CAF0F8]/50 border-[#03045E]/30 text-[#03045E] focus:ring-[#48CAE4]";
   const btnSubmit = isDarkMode 
     ? "bg-gray-700 border-gray-500 text-white hover:bg-gray-600" 
     : "bg-[#CAF0F8] border-[#03045E] text-[#03045E] hover:bg-[#48CAE4]";
+  const lockedBg = isDarkMode ? "bg-red-900/20 border-red-800 text-red-200" : "bg-red-50 border-red-200 text-red-800";
 
   if (existingData) {
     return (
@@ -75,6 +92,33 @@ const AttendanceSection = ({ onBack, onSubmit, existingData }) => {
             <span className={`text-[10px] block mt-2 ${subTextColor}`}>
               {content[locale].time}: {existingData.timestamp}
             </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isToday) {
+    const today = new Date();
+    const isPast = selectedDate < new Date(today.setHours(0,0,0,0)); 
+    const descMessage = isPast ? content[locale].pastDesc : content[locale].futureDesc;
+
+    return (
+      <div className="pt-2 h-full flex flex-col">
+        <button onClick={onBack} className={`mb-4 text-xs font-bold underline self-start ${textLink}`}>
+          {content[locale].back}
+        </button>
+
+        <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
+          <div className={`p-6 rounded-2xl border-2 flex flex-col items-center gap-4 ${lockedBg}`}>
+             <div className="text-4xl">🔒</div>
+             <div>
+                <h3 className="font-bold text-lg mb-1">{content[locale].lockedTitle}</h3>
+                <p className="text-sm opacity-80">{descMessage}</p>
+                <p className="text-xs mt-4 font-semibold opacity-60">
+                    ({content[locale].lockedDesc})
+                </p>
+             </div>
           </div>
         </div>
       </div>

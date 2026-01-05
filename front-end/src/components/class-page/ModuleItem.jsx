@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import LocaleContext from '../../contexts/LocaleContext';
 import ThemeContext from '../../contexts/ThemeContext';
 
-const ModuleItem = ({ title, status }) => {
+const ModuleItem = ({ title, status, url }) => {
   const { locale } = useContext(LocaleContext);
   const { theme } = useContext(ThemeContext);
 
@@ -28,7 +28,12 @@ const ModuleItem = ({ title, status }) => {
   };
 
   return (
-    <div className={`flex items-center justify-between w-full p-3 mb-2 border rounded-lg shadow-sm transition-colors ${containerClass}`}>
+    <a 
+      href={url} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className={`flex items-center justify-between w-full p-3 mb-2 border rounded-lg shadow-sm transition-colors cursor-pointer ${containerClass}`}
+    >
       <span className={`font-medium text-sm md:text-base ${titleColor}`}>
         {title}
       </span>
@@ -36,7 +41,7 @@ const ModuleItem = ({ title, status }) => {
       <span className={`text-xs font-bold uppercase px-2 py-1 rounded ${getStatusColor()}`}>
         {displayStatus}
       </span>
-    </div>
+    </a>
   );
 };
 

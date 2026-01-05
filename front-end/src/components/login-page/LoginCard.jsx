@@ -19,7 +19,6 @@ const LoginCard = ({ onLogin }) => {
       passwordLabel: 'Kata Sandi',
       passwordPlaceholder: '********',
       remember: 'Ingat selama 30 hari',
-      forgot: 'Lupa kata sandi?',
       button: 'Masuk',
       alertFeature: 'Fitur Reset Password akan mengirim link ke email Anda (Memerlukan Backend).'
     },
@@ -30,7 +29,6 @@ const LoginCard = ({ onLogin }) => {
       passwordLabel: 'Password',
       passwordPlaceholder: '********',
       remember: 'Remember for 30 days',
-      forgot: 'Forgot password?',
       button: 'Login',
       alertFeature: 'Reset Password feature will send a link to your email (Requires Backend).'
     }
@@ -51,10 +49,6 @@ const LoginCard = ({ onLogin }) => {
   const handleLogin = (e) => {
     e.preventDefault();
     onLogin({ email, password, rememberMe });
-  };
-
-  const handleForgotPassword = () => {
-    alert(content[locale].alertFeature);
   };
 
   return (
@@ -103,14 +97,6 @@ const LoginCard = ({ onLogin }) => {
               />
               {content[locale].remember}
             </label>
-
-            <button 
-              type="button" 
-              onClick={handleForgotPassword}
-              className="hover:underline font-semibold bg-transparent border-none cursor-pointer"
-            >
-              {content[locale].forgot}
-            </button>
           </div>
 
           <button

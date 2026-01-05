@@ -55,15 +55,16 @@ const DetailClass = ({ isOpen, onClose, data }) => {
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100 visible bg-black/60 backdrop-blur-sm' : 'opacity-0 invisible'}`} 
+      className={`fixed inset-0 z-9999 flex items-start justify-center px-4 pt-10 pb-24 transition-all duration-300 ${isOpen ? 'opacity-100 visible bg-black/60 backdrop-blur-sm' : 'opacity-0 invisible'}`} 
       onClick={handleClose}
     >
       <div 
-        className={`rounded-[20px] p-6 w-full max-w-4xl border-2 relative flex flex-col max-h-[90vh] transition-all duration-300 transform ${modalBg} ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`} 
+        className={`rounded-[20px] w-full max-w-4xl border-2 relative flex flex-col max-h-full overflow-hidden transition-all duration-300 transform ${modalBg} ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`} 
         onClick={(e) => e.stopPropagation()}
       >
         {data ? (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full overflow-hidden p-6"> 
+            
             <div className="mb-6 shrink-0">
                <ClassCard 
                   title={data.title} 
@@ -71,8 +72,8 @@ const DetailClass = ({ isOpen, onClose, data }) => {
                />
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-              <div className="flex flex-col gap-2">
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-0">
+              <div className="flex flex-col gap-2 pb-2"> 
                 {isLoading ? (
                    <p className={`text-center py-4 ${textColor}`}>{content[locale].loading}</p>
                 ) : modulesList.length > 0 ? (
@@ -81,6 +82,7 @@ const DetailClass = ({ isOpen, onClose, data }) => {
                       key={modul.id}
                       title={modul.title}
                       status={modul.status}
+                      url={modul.url || "https://www.dicoding.com"} 
                     />
                   ))
                 ) : (
@@ -92,7 +94,6 @@ const DetailClass = ({ isOpen, onClose, data }) => {
         ) : (
           <div className={`text-center py-10 ${textColor}`}>{content[locale].loadingData}</div>
         )}
-
       </div>
     </div>
   );

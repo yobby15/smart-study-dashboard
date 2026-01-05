@@ -39,7 +39,7 @@ const NavigationUp = ({ isLandingPage = false, user }) => {
     >
       <div className="flex-1">
         <h1 className={`font-bold text-base md:text-lg leading-tight ${textColorClass}`}>
-          Smart Study Assistant
+          Smart Study Dashboard
         </h1>
       </div>
 
